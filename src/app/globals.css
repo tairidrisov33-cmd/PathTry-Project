@@ -8,3 +8,22 @@
 .result-shell { max-width:1050px; margin:auto; padding:50px 28px 80px; }.result-hero { display:grid; grid-template-columns:1.2fr .8fr; gap:30px; align-items:stretch; margin:55px 0 50px; }.result-hero h1 { font-size:56px; line-height:1; letter-spacing:-2.5px; margin:12px 0; }.score-card { background:var(--ink); color:white; border-radius:22px; padding:28px; display:flex; flex-direction:column; justify-content:center; }.score { font:700 75px 'Space Grotesk'; color:#f8c66e; line-height:1; }.verdict { font-size:24px; font-weight:700; margin:12px 0 5px; }.result-section { border-top:1px solid var(--line); padding:30px 0; display:grid; grid-template-columns:1fr 2fr; gap:30px; }.result-section h2 { font-size:24px; margin:0; }.tag-list { display:flex; flex-wrap:wrap; gap:9px; }.tag { background:white; border:1px solid var(--line); border-radius:99px; padding:9px 13px; font-size:14px; }.next-list { counter-reset:steps; list-style:none; padding:0; margin:0; }.next-list li { counter-increment:steps; padding:0 0 18px 38px; position:relative; line-height:1.5; }.next-list li:before { content:counter(steps); position:absolute; left:0; top:-2px; width:25px; height:25px; border-radius:50%; display:grid; place-items:center; background:#f8c66e; font-weight:700; }.result-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:20px; }.btn-outline { border:1px solid var(--ink); background:transparent; }.btn-outline:hover { background:white; }
 @media(max-width:800px) { .header-note { display:none; }.hero { grid-template-columns:1fr; padding-top:45px; gap:30px; }.hero-art { min-height:280px; }.steps,.professions { grid-template-columns:1fr 1fr; }.professions .profession-card:last-child { grid-column:span 2; }.result-hero { grid-template-columns:1fr; }.result-section { grid-template-columns:1fr; gap:15px; } }
 @media(max-width:520px) { .site-header { padding:20px; }.hero,.section,.try-shell,.result-shell { padding-left:20px; padding-right:20px; }.hero h1 { letter-spacing:-2px; }.hero-art { min-height:240px; }.steps,.professions { grid-template-columns:1fr; }.professions .profession-card:last-child { grid-column:auto; }.section h2 { font-size:32px; }.try-title h1,.result-hero h1 { font-size:42px; }.task-box { padding:22px; }.footer { margin-top:40px; padding:24px 20px; flex-direction:column; gap:12px; } }
+
+.hero > div:first-child, .section-head, .try-title, .result-hero { animation: rise-in .7s cubic-bezier(.22, 1, .36, 1) both; }
+.hero-art { animation: float-in .9s cubic-bezier(.22, 1, .36, 1) .1s both; }
+.step, .profession-card { animation: rise-in .6s cubic-bezier(.22, 1, .36, 1) both; }
+.step:nth-child(2), .profession-card:nth-child(2) { animation-delay: .08s; }
+.step:nth-child(3), .profession-card:nth-child(3) { animation-delay: .16s; }
+.profession-card:nth-child(4) { animation-delay: .24s; }
+.profession-card:nth-child(5) { animation-delay: .32s; }
+.profession-card:nth-child(n+6) { animation-delay: .4s; }
+.orbit { animation: orbit-spin 16s linear infinite; }
+.hero-card { animation: card-drift 4s ease-in-out infinite; }
+.method-section { max-width:1180px; margin:0 auto 90px; padding:30px 28px; border-top:1px solid var(--line); display:grid; grid-template-columns:1fr 2fr; gap:30px; }
+.method-section h2 { max-width:390px; margin:0; font-size:30px; letter-spacing:-1px; }.method-section p { max-width:650px; margin-top:0; color:var(--muted); line-height:1.65; }.method-note { font-size:13px; }.source-links { display:flex; gap:10px; flex-wrap:wrap; }.source-links a { border-bottom:1px solid var(--coral); color:var(--ink); font-weight:700; padding-bottom:3px; }.source-links a:hover { color:var(--coral); }
+@keyframes rise-in { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes float-in { from { opacity:0; transform:translateX(22px) rotate(2deg); } to { opacity:1; transform:translateX(0) rotate(0); } }
+@keyframes orbit-spin { to { transform:rotate(360deg); } }
+@keyframes card-drift { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+@media(prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; } }
+@media(max-width:800px) { .method-section { grid-template-columns:1fr; gap:15px; } }

@@ -1,6 +1,8 @@
 # PathTry
 
-PathTry is a small Next.js app that lets students try a profession before choosing a major. It has no database or login: progress is saved in the browser with localStorage, and profession content lives in `src/data/professions.ts`.
+PathTry is a small Next.js app that lets students try a profession before choosing a major. It includes 10 professions and 5 short tasks per profession. It has no database or login: progress is saved in the browser with localStorage, and profession content lives in `src/data/professions.ts`.
+
+The scenarios are informed by work activities in [O*NET OnLine](https://www.onetonline.org/) and the [European ESCO taxonomy](https://esco.ec.europa.eu/). They are simplified reflection exercises, not a clinical or psychological diagnosis and not a prediction of career success.
 
 ## Run locally
 
