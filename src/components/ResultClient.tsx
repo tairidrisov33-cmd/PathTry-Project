@@ -27,6 +27,7 @@ export default function ResultClient({ profession }: { profession: Profession })
   const [showCard, setShowCard] = useState(false);
   const [answers, setAnswers] = useState<SavedAnswer[]>([]);
   const [celebrate, setCelebrate] = useState(false);
+  const [printDate, setPrintDate] = useState('');
 
   useEffect(() => {
     try {
@@ -40,6 +41,9 @@ export default function ResultClient({ profession }: { profession: Profession })
       if (sessionStorage.getItem('pathtry-celebrate') === profession.slug) { sessionStorage.removeItem('pathtry-celebrate'); setCelebrate(true); }
     } catch { setResult((current) => ({ ...current, ready: true })); }
   }, [profession.slug]);
+
+  // Set on the client only, so the prerendered page never hydrates with a stale date.
+  useEffect(() => { setPrintDate(new Date().toLocaleDateString(ru ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' })); }, [ru]);
 
   const skills = useMemo<SkillPoint[]>(() => {
     const labels = ru ? ['Решение задач', 'Эмпатия и общение', 'Аналитика', 'Креативность и видение', 'Стрессоустойчивость'] : ['Problem Solving', 'Empathy & Communication', 'Analytical Thinking', 'Creativity & Vision', 'Stress Resilience'];
@@ -80,7 +84,17 @@ export default function ResultClient({ profession }: { profession: Profession })
     return { id: task.id, prompt, good: !!answer?.score, answered: !!answer, outcome, feeling };
   });
 
+  const savePdf = () => {
+    // The browser uses the document title as the default PDF file name.
+    const previousTitle = document.title;
+    document.title = `PathTry — ${localized.title}`;
+    const restore = () => { document.title = previousTitle; window.removeEventListener('afterprint', restore); };
+    window.addEventListener('afterprint', restore);
+    window.print();
+  };
+
   return <>
+    <div className="print-header" aria-hidden="true"><span className="print-brand">path<span>try</span></span><span>{text.snapshot}{printDate && ` · ${printDate}`}</span></div>
     {celebrate && result.ready && <><Confetti /><div className="toast" role="status"><Icon name="sparkle" size={16} />{text.celebrate}</div></>}
     <TransitionLink className="back" href="/"><Icon name="arrowLeft" size={15} />{text.back}</TransitionLink>
     <div className="result-hero">
@@ -98,7 +112,7 @@ export default function ResultClient({ profession }: { profession: Profession })
     <section className="result-section"><h2><span className="section-icon"><Icon name="book" size={18} /></span>{text.subjects}</h2><div><p className="muted">{text.foundations}</p><div className="tag-list">{[...details.subjects, ...details.exams].map((item) => <span className="tag" key={item}>{item}</span>)}</div></div></section>
     <section className="result-section"><h2><span className="section-icon"><Icon name="cap" size={18} /></span>{text.majors}</h2><div className="tag-list">{details.majors.map((major) => <span className="tag" key={major}>{major}</span>)}</div></section>
     <section className="result-section"><h2><span className="section-icon"><Icon name="route" size={18} /></span>{text.steps}</h2><ol className="next-list">{details.nextSteps.map((next) => <li key={next}>{next}</li>)}</ol></section>
-    <div className="result-actions"><button className="btn btn-primary" type="button" onClick={() => setShowCard(true)}><Icon name="badge" size={17} />{ru ? 'Получить verification-карточку' : 'Get My Verification Card'}</button><TransitionLink className="btn btn-outline" href={`/try/${profession.slug}`}><Icon name="refresh" size={16} />{text.retake}</TransitionLink><TransitionLink className="btn btn-outline" href="/"><Icon name="grid" size={16} />{text.another}</TransitionLink><button className="btn btn-ghost" type="button" onClick={() => window.print()}><Icon name="printer" size={16} />{text.pdf}</button></div>
+    <div className="result-actions"><button className="btn btn-primary" type="button" onClick={() => setShowCard(true)}><Icon name="badge" size={17} />{ru ? 'Получить verification-карточку' : 'Get My Verification Card'}</button><TransitionLink className="btn btn-outline" href={`/try/${profession.slug}`}><Icon name="refresh" size={16} />{text.retake}</TransitionLink><TransitionLink className="btn btn-outline" href="/"><Icon name="grid" size={16} />{text.another}</TransitionLink><button className="btn btn-ghost" type="button" onClick={savePdf}><Icon name="printer" size={16} />{text.pdf}</button></div>
     {showCard && <VerificationCard profession={localized.title} match={match} strongest={strongest.label} skills={skills} language={language} onClose={() => setShowCard(false)} />}
   </>;
 }

@@ -35,9 +35,7 @@ export default function Home() {
           <strong>{text.heroPrompt}</strong>
           <div className="hero-mock-option"><span>{text.heroOptionA}</span></div>
           <div className="hero-mock-option is-correct"><span>{text.heroOptionB}</span><Icon name="check" size={14} strokeWidth={2.6} /></div>
-          <div className="hero-mock-foot"><Icon name="sparkle" size={14} />{text.strong}</div>
         </div>
-        <div className="hero-stat"><Icon name="layers" size={18} /><span><b>{text.heroStat}</b><small>{text.heroStatText}</small></span></div>
       </div>
     </section>
     <section className="section"><div className="section-head"><div><div className="kicker">{text.howKicker}</div><h2>{text.howTitle}</h2></div><span className="muted">{text.built}</span></div><div className="steps">{steps.map((step, index) => <div className="step" key={step.title}><div className="step-top"><span className="step-num">0{index + 1}</span><span className="step-icon"><Icon name={step.icon} size={20} /></span></div><h3>{step.title}</h3><p>{step.body}</p></div>)}</div></section>
