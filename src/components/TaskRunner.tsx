@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { Profession } from '@/data/professions';
 import { ui } from '@/data/translations';
 import { useLanguage } from '@/components/LanguageProvider';
+import { professionRuDetails } from '@/data/professionRuDetails';
 
 type SavedAnswer = { score: number; enjoyment: string; text: string };
 
@@ -18,7 +19,8 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
   const [reviewFeedback, setReviewFeedback] = useState('');
   const [answers, setAnswers] = useState<SavedAnswer[]>([]);
   const [reviewing, setReviewing] = useState(false);
-  const task = profession.tasks[step];
+  const baseTask = profession.tasks[step];
+  const task = language === 'ru' ? { ...baseTask, ...professionRuDetails[profession.slug]?.tasks[baseTask.id] } : baseTask;
   const hasAnswer = task.type === 'choice' ? choice !== null : text.trim().length > 0;
 
   useEffect(() => {
