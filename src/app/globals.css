@@ -39,6 +39,8 @@ html:not(.dark) { --surface:#ffffff; --surface-soft:#f2f5f1; }
 .dark .btn-outline { border-color:#92aaa0; color:#f1f4ed; }
 .dark .btn-outline:hover { background:#263a34; color:#fff; }
 .hero-art:after, .hero-card strong, .empty-results strong, .featured-inline strong, .score, .profession-card h3, .task-box h2, .result-hero h1 { font-family:'Manrope', sans-serif; }
+html, body, button, input, textarea, select, option, h1, h2, h3, h4, h5, h6, p, a, span, small, strong, li { font-family:'Manrope', sans-serif !important; }
+html[data-language='ru'] h1, html[data-language='ru'] h2, html[data-language='ru'] h3 { letter-spacing:-.5px; }
 
 .profession-card, .task-box, .hero-card, .option, .text-answer, .enjoy button, .tag { background:var(--surface); color:var(--ink); border-color:var(--line); transition:background-color .45s ease, color .45s ease, border-color .35s ease, box-shadow .35s ease, transform .25s ease; }
 .option:hover, .enjoy button:hover { background:var(--surface-soft); }
