@@ -1,10 +1,16 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import type { MouseEvent, ReactNode } from 'react';
 
 export default function TransitionLink({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    document.body.classList.remove('page-exit');
+  }, [pathname]);
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (href.startsWith('#') || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
