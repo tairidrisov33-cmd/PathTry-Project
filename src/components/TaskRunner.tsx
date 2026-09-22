@@ -5,8 +5,10 @@ import type { Profession } from '@/data/professions';
 import { ui } from '@/data/translations';
 import { useLanguage } from '@/components/LanguageProvider';
 import { professionRuDetails } from '@/data/professionRuDetails';
+import { explanationsRu } from '@/data/explanationsRu';
 
-type SavedAnswer = { score: number; enjoyment: string; text: string };
+type EnjoymentKey = 'yes' | 'so-so' | 'no';
+type SavedAnswer = { score: number; enjoyment: EnjoymentKey; text: string };
 
 export default function TaskRunner({ profession }: { profession: Profession }) {
   const { language } = useLanguage();
@@ -14,7 +16,7 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
   const [step, setStep] = useState(0);
   const [choice, setChoice] = useState<number | null>(null);
   const [text, setText] = useState('');
-  const [enjoyment, setEnjoyment] = useState<string | null>(null);
+  const [enjoyment, setEnjoyment] = useState<EnjoymentKey | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [reviewFeedback, setReviewFeedback] = useState('');
   const [answers, setAnswers] = useState<SavedAnswer[]>([]);
@@ -43,7 +45,7 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
     if (task.type !== 'text') return;
     setReviewing(true);
     try {
-      const response = await fetch('/api/review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ answer: text, profession: profession.title }) });
+      const response = await fetch('/api/review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ answer: text, profession: profession.title, language }) });
       const review = await response.json();
       setReviewFeedback(review.feedback || (language === 'ru' ? 'Ответ записан.' : 'Your answer has been noted.'));
     } catch { setReviewFeedback(language === 'ru' ? 'Ответ записан. Попробуй добавить одну конкретную деталь.' : 'Your answer has been noted. Try making one detail more specific.'); }
@@ -67,7 +69,7 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
 
   const answerContent = task.type === 'choice' ? <div className="options-list">
     {task.options?.map((option, index) => <button className={`option ${choice === index ? 'selected' : ''} ${submitted && index === task.answer ? 'correct' : ''} ${submitted && choice === index && choice !== task.answer ? 'wrong' : ''}`} onClick={() => !submitted && setChoice(index)} type="button" key={option}><span>{option}</span>{choice === index && <span className="option-check">{submitted ? (choice === task.answer ? '✓' : '×') : '○'}</span>}</button>)}
-    {submitted && <div className="feedback">{choice === task.answer ? (language === 'ru' ? 'Это самый сильный вариант. ' : 'That is the strongest move. ') : (language === 'ru' ? 'Не совсем, но это полезная информация. ' : 'Not quite, but this is useful information. ')}{task.explanation}</div>}
+    {submitted && <div className="feedback">{choice === task.answer ? (language === 'ru' ? 'Это самый сильный вариант. ' : 'That is the strongest move. ') : (language === 'ru' ? 'Не совсем, но это полезная информация. ' : 'Not quite, but this is useful information. ')}{language === 'ru' ? explanationsRu[task.id] : task.explanation}</div>}
   </div> : <textarea className="text-answer" value={text} onChange={(event) => !submitted && setText(event.target.value)} placeholder={task.placeholder} disabled={submitted} />;
 
   return <div>
@@ -78,7 +80,7 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
       {answerContent}
       {submitted && task.type === 'text' && <div className="feedback">{reviewing ? (language === 'ru' ? 'Проверяем ответ...' : 'Reviewing your answer...') : reviewFeedback}</div>}
       {!submitted && <div className="task-actions"><button className="btn btn-primary" onClick={submitAnswer} type="button" disabled={!hasAnswer}>{task.type === 'choice' ? uiText.submit : uiText.response}</button></div>}
-      {submitted && <div className="enjoy"><p>{uiText.enjoy}</p><div className="enjoy-options">{[uiText.yes, uiText.soSo, uiText.no].map((value) => <button className={enjoyment === value ? 'selected' : ''} onClick={() => setEnjoyment(value)} type="button" key={value}>{value}</button>)}</div></div>}
+      {submitted && <div className="enjoy"><p>{uiText.enjoy}</p><div className="enjoy-options">{([{ key: 'yes', label: uiText.yes }, { key: 'so-so', label: uiText.soSo }, { key: 'no', label: uiText.no }] as const).map((option) => <button className={enjoyment === option.key ? 'selected' : ''} onClick={() => setEnjoyment(option.key)} type="button" key={option.key}>{option.label}</button>)}</div></div>}
       {submitted && <div className="task-actions"><button className="btn btn-primary" onClick={continueToNext} type="button" disabled={!enjoyment || reviewing}>{step === profession.tasks.length - 1 ? `${uiText.result} →` : `${uiText.next} →`}</button></div>}
     </div>
   </div>;

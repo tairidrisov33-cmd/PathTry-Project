@@ -54,3 +54,4 @@ html[data-language='ru'] h1, html[data-language='ru'] h2, html[data-language='ru
 .task-box { animation: task-enter .48s cubic-bezier(.22, 1, .36, 1) both; }
 @keyframes page-exit { to { opacity:0; transform:translateY(-10px); } }
 @keyframes task-enter { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+@media print { @page { margin:16mm; } body { background:#fff !important; color:#17211f !important; } .site-header, .footer, .result-shell > .back, .result-actions { display:none !important; } .result-shell { max-width:none; padding:0; } .result-hero { margin:0 0 25px; } .score-card { background:#17211f !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; } .result-section { break-inside:avoid; } }

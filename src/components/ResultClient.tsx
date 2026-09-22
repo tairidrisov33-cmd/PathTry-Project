@@ -19,7 +19,7 @@ export default function ResultClient({ profession }: { profession: Profession })
       const saved = JSON.parse(localStorage.getItem(`pathtry-${profession.slug}`) || '{}');
       const answers: SavedAnswer[] = saved.answers || [];
       const score = answers.reduce((total, answer) => total + answer.score, 0);
-      const values: Record<string, number> = language === 'ru' ? { Да: 2, 'Так себе': 1, Нет: 0 } : { Yes: 2, 'So-so': 1, No: 0 };
+      const values: Record<string, number> = { yes: 2, 'so-so': 1, no: 0, Да: 2, 'Так себе': 1, Нет: 0, Yes: 2, 'So-so': 1, No: 0 };
       const enjoyment = answers.length
         ? Math.round(answers.reduce((total, answer) => total + (values[answer.enjoyment] || 0), 0) / answers.length * 50)
         : 0;
@@ -39,6 +39,7 @@ export default function ResultClient({ profession }: { profession: Profession })
   const reason = verdict === text.good ? text.goodReason : verdict === text.exploreMore ? text.exploreReason : text.probablyReason;
 
   return <>
+    <TransitionLink className="back" href="/">← {text.back}</TransitionLink>
     <div className="result-hero">
       <div><div className="kicker">{text.snapshot}</div><h1>{localized.title}</h1><p className="muted">{text.resultText}</p></div>
       <div className="score-card"><span className="muted">{text.workScore}</span><div className="score">{result.score}/5</div><div className="verdict">{result.ready ? verdict : text.reading}</div><span>{reason}</span><br /><span className="muted">{text.enjoyment}: {result.enjoyment}%</span></div>
