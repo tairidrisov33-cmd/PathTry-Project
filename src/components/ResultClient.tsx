@@ -20,8 +20,9 @@ export default function ResultClient({ profession }: { profession: Profession })
       const answers: SavedAnswer[] = saved.answers || [];
       const score = answers.reduce((total, answer) => total + answer.score, 0);
       const values: Record<string, number> = { yes: 2, 'so-so': 1, no: 0, Да: 2, 'Так себе': 1, Нет: 0, Yes: 2, 'So-so': 1, No: 0 };
-      const enjoyment = answers.length
-        ? Math.round(answers.reduce((total, answer) => total + (values[answer.enjoyment] || 0), 0) / answers.length * 50)
+      const enjoymentAnswers = answers.filter((answer) => values[answer.enjoyment] !== undefined);
+      const enjoyment = enjoymentAnswers.length
+        ? Math.round(enjoymentAnswers.reduce((total, answer) => total + values[answer.enjoyment], 0) / enjoymentAnswers.length * 50)
         : 0;
       setResult({ score, enjoyment, ready: true });
     } catch {

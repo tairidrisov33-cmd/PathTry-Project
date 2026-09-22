@@ -7,7 +7,7 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { professionRuDetails } from '@/data/professionRuDetails';
 import { explanationsRu } from '@/data/explanationsRu';
 
-type EnjoymentKey = 'yes' | 'so-so' | 'no';
+type EnjoymentKey = 'yes' | 'so-so' | 'no' | 'skipped';
 type SavedAnswer = { score: number; enjoyment: EnjoymentKey; text: string };
 
 export default function TaskRunner({ profession }: { profession: Profession }) {
@@ -55,7 +55,7 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
   const continueToNext = () => {
     if (!submitted || !enjoyment || reviewing) return;
     const score = task.type === 'choice' ? (choice === task.answer ? 1 : 0) : (text.trim().length >= 20 ? 1 : 0);
-    const nextAnswers = [...answers, { score, enjoyment, text }];
+    const nextAnswers = [...answers, { score, enjoyment: enjoyment || 'skipped', text }];
     if (step === profession.tasks.length - 1) {
       localStorage.setItem(`pathtry-${profession.slug}`, JSON.stringify({ step: 0, answers: nextAnswers }));
       document.body.classList.add('page-exit');
@@ -69,19 +69,19 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
 
   const answerContent = task.type === 'choice' ? <div className="options-list">
     {task.options?.map((option, index) => <button className={`option ${choice === index ? 'selected' : ''} ${submitted && index === task.answer ? 'correct' : ''} ${submitted && choice === index && choice !== task.answer ? 'wrong' : ''}`} onClick={() => !submitted && setChoice(index)} type="button" key={option}><span>{option}</span>{choice === index && <span className="option-check">{submitted ? (choice === task.answer ? '✓' : '×') : '○'}</span>}</button>)}
-    {submitted && <div className="feedback">{choice === task.answer ? (language === 'ru' ? 'Это самый сильный вариант. ' : 'That is the strongest move. ') : (language === 'ru' ? 'Не совсем, но это полезная информация. ' : 'Not quite, but this is useful information. ')}{language === 'ru' ? explanationsRu[task.id] : task.explanation}</div>}
+    {submitted && <div className="feedback">{choice === task.answer ? (language === 'ru' ? 'Это самый сильный вариант. ' : 'That is the strongest move. ') : (language === 'ru' ? 'Не совсем, но это полезная информация. ' : 'Not quite, but this is useful information. ')}{language === 'ru' ? (explanationsRu[task.id] || 'Это задание помогает заметить, как ты принимаешь решения.') : task.explanation}</div>}
   </div> : <textarea className="text-answer" value={text} onChange={(event) => !submitted && setText(event.target.value)} placeholder={task.placeholder} disabled={submitted} />;
 
   return <div>
-    <div className="task-meta"><span>{uiText.task} {step + 1} / {profession.tasks.length}</span><span>{Math.round((step / profession.tasks.length) * 100)}% {uiText.complete}</span></div>
+    <div className="task-meta"><span>{uiText.task} {step + 1} {language === 'ru' ? 'из' : 'of'} {profession.tasks.length}</span><span>{Math.round((step / profession.tasks.length) * 100)}% {uiText.complete}</span></div>
     <div className="progress-track"><div className="progress-fill" style={{ width: `${(step / profession.tasks.length) * 100}%` }} /></div>
     <div className="task-box" key={task.id}>
       <h2>{task.prompt}</h2>{task.context && <p className="context">{task.context}</p>}
       {answerContent}
       {submitted && task.type === 'text' && <div className="feedback">{reviewing ? (language === 'ru' ? 'Проверяем ответ...' : 'Reviewing your answer...') : reviewFeedback}</div>}
       {!submitted && <div className="task-actions"><button className="btn btn-primary" onClick={submitAnswer} type="button" disabled={!hasAnswer}>{task.type === 'choice' ? uiText.submit : uiText.response}</button></div>}
-      {submitted && <div className="enjoy"><p>{uiText.enjoy}</p><div className="enjoy-options">{([{ key: 'yes', label: uiText.yes }, { key: 'so-so', label: uiText.soSo }, { key: 'no', label: uiText.no }] as const).map((option) => <button className={enjoyment === option.key ? 'selected' : ''} onClick={() => setEnjoyment(option.key)} type="button" key={option.key}>{option.label}</button>)}</div></div>}
-      {submitted && <div className="task-actions"><button className="btn btn-primary" onClick={continueToNext} type="button" disabled={!enjoyment || reviewing}>{step === profession.tasks.length - 1 ? `${uiText.result} →` : `${uiText.next} →`}</button></div>}
+      {submitted && <div className="enjoy"><p>{uiText.enjoy} <span className="optional-note">({language === 'ru' ? 'необязательно' : 'optional'})</span></p><div className="enjoy-options">{([{ key: 'yes', label: uiText.yes }, { key: 'so-so', label: uiText.soSo }, { key: 'no', label: uiText.no }] as const).map((option) => <button className={enjoyment === option.key ? 'selected' : ''} onClick={() => setEnjoyment(option.key)} type="button" key={option.key}>{option.label}</button>)}</div></div>}
+      {submitted && <div className="task-actions"><button className="btn btn-primary" onClick={continueToNext} type="button" disabled={reviewing}>{step === profession.tasks.length - 1 ? `${uiText.result} →` : `${uiText.next} →`}</button></div>}
     </div>
   </div>;
 }
