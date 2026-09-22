@@ -39,10 +39,20 @@ export async function POST(request: Request) {
 }
 
 function fallback(answer: string, language: 'en' | 'ru') {
-  if (language === 'ru') return answer.trim().length >= 20
-    ? 'Ты дал содержательный ответ. Заметь, как ты сделал выбор и ясно его объяснил.'
-    : 'Ты начал рассуждать. Одна конкретная деталь сделает твою мысль понятнее для действия.';
-  return answer.trim().length >= 20
-    ? 'You gave a considered response. Notice how you made a choice and explained it clearly.'
-    : 'You made a start. In real work, adding one specific detail would make your thinking easier to act on.';
+  const clean = answer.trim();
+  const longEnough = clean.length >= 20;
+  const hasReason = /because|so that|therefore|потому что|чтобы|так как/i.test(clean);
+  const hasSpecific = /\d|first|then|после|сначала|затем|конкрет/i.test(clean);
+  if (language === 'ru') {
+    if (!clean) return 'Начни с одной конкретной мысли. Даже короткая попытка поможет понять, как тебе подходит этот тип работы.';
+    if (hasReason && hasSpecific) return 'Хорошо: в ответе есть причина и конкретика. Следующий шаг — проверить, действительно ли это решение помогает человеку или пользователю.';
+    if (hasReason) return 'Ты объяснил причину, это сильная основа. Добавь один пример или наблюдаемый результат, чтобы мысль стала убедительнее.';
+    if (hasSpecific || longEnough) return 'В ответе уже есть полезная деталь. Уточни, для кого это важно и какой результат можно будет заметить.';
+    return 'Хорошее начало. Добавь причину: почему ты выбрал именно такой подход?';
+  }
+  if (!clean) return 'Start with one concrete thought. Even a short attempt helps you notice whether this kind of work feels natural.';
+  if (hasReason && hasSpecific) return 'Strong structure: you included a reason and a concrete detail. Next, check whether the idea actually helps a person or user.';
+  if (hasReason) return 'You explained a reason, which is a useful foundation. Add one example or observable result to make it more convincing.';
+  if (hasSpecific || longEnough) return 'There is a useful detail here. Clarify who it matters to and what result someone could notice.';
+  return 'Good start. Add one reason: why did you choose this approach?';
 }
