@@ -1,20 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageProvider';
+import Icon from '@/components/Icon';
 
 type Message = { role: 'user' | 'assistant'; content: string };
 
+const suggestions = {
+  en: { home: ['Which profession suits a curious person?', 'How does PathTry work?'], try: ['What does this task test?', 'How do I write a strong answer?'], result: ['What should I do next?', 'How should I read my result?'] },
+  ru: { home: ['Какая профессия подойдёт любознательному?', 'Как работает PathTry?'], try: ['Что проверяет это задание?', 'Как написать сильный ответ?'], result: ['Что мне делать дальше?', 'Как понимать мой результат?'] }
+};
+
 export default function AssistantWidget() {
   const { language } = useLanguage();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const ru = language === 'ru';
+  const page = pathname.startsWith('/result') ? 'result' : pathname.startsWith('/try') ? 'try' : 'home';
 
-  const send = async () => {
-    const question = input.trim();
+  useEffect(() => { listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' }); }, [messages, loading]);
+  useEffect(() => {
+    if (!open) return;
+    inputRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  const send = async (preset?: string) => {
+    const question = (preset ?? input).trim();
     if (!question || loading) return;
     setInput('');
     setOpen(true);
@@ -30,7 +50,15 @@ export default function AssistantWidget() {
   };
 
   return <div className={`assistant-widget ${open ? 'is-open' : ''}`}>
-    {open && <div className="assistant-panel"><div className="assistant-panel-head"><div><strong>{ru ? 'PathTry помощник' : 'PathTry guide'}</strong><small>{ru ? 'Подскажу, но не буду выбирать за тебя' : 'I can guide you without choosing for you'}</small></div><button type="button" onClick={() => setOpen(false)} aria-label={ru ? 'Закрыть помощника' : 'Close guide'}>×</button></div><div className="assistant-messages">{messages.length === 0 && <p className="assistant-welcome">{ru ? 'Спроси о профессии, задании или результате.' : 'Ask about a profession, a task, or your result.'}</p>}{messages.map((message, index) => <div className={`assistant-message ${message.role}`} key={`${message.role}-${index}`}>{message.content}</div>)}{loading && <div className="assistant-message assistant">{ru ? 'Думаю...' : 'Thinking...'}</div>}</div><div className="assistant-input"><input value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && send()} placeholder={ru ? 'Например: что проверяет это задание?' : 'For example: what does this task test?'} /><button type="button" onClick={send} disabled={!input.trim() || loading} aria-label={ru ? 'Отправить' : 'Send'}>↑</button></div></div>}
-    <button className="assistant-launcher" type="button" onClick={() => setOpen((value) => !value)} aria-label={ru ? 'Открыть помощника' : 'Open guide'}><span className="assistant-spark">✦</span><span>{ru ? 'Помощник' : 'Guide'}</span></button>
+    {open && <div className="assistant-panel" role="dialog" aria-label={ru ? 'PathTry помощник' : 'PathTry guide'}>
+      <div className="assistant-panel-head"><span className="assistant-avatar"><Icon name="sparkle" size={17} /></span><div><strong>{ru ? 'PathTry помощник' : 'PathTry guide'}</strong><small><span className="online-dot" />{ru ? 'Подскажу, но не буду выбирать за тебя' : 'I can guide you without choosing for you'}</small></div><button type="button" onClick={() => setOpen(false)} aria-label={ru ? 'Закрыть помощника' : 'Close guide'}><Icon name="x" size={15} strokeWidth={2.4} /></button></div>
+      <div className="assistant-messages" ref={listRef} aria-live="polite">
+        {messages.length === 0 && <div className="assistant-empty"><p className="assistant-welcome">{ru ? 'Спроси о профессии, задании или результате.' : 'Ask about a profession, a task, or your result.'}</p><div className="assistant-suggestions">{suggestions[language][page].map((item) => <button type="button" key={item} onClick={() => send(item)}><Icon name="sparkle" size={13} />{item}</button>)}</div></div>}
+        {messages.map((message, index) => <div className={`assistant-message ${message.role}`} key={`${message.role}-${index}`}>{message.content}</div>)}
+        {loading && <div className="assistant-message assistant typing-dots" aria-label={ru ? 'Думаю' : 'Thinking'}><i /><i /><i /></div>}
+      </div>
+      <form className="assistant-input" onSubmit={(event) => { event.preventDefault(); send(); }}><input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} placeholder={ru ? 'Например: что проверяет это задание?' : 'For example: what does this task test?'} /><button type="submit" disabled={!input.trim() || loading} aria-label={ru ? 'Отправить' : 'Send'}><Icon name="send" size={16} /></button></form>
+    </div>}
+    <button className="assistant-launcher" type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={ru ? 'Открыть помощника' : 'Open guide'}><span className="assistant-spark"><Icon name={open ? 'x' : 'sparkle'} size={17} /></span><span>{ru ? 'Помощник' : 'Guide'}</span></button>
   </div>;
 }

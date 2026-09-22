@@ -2,9 +2,9 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import type { MouseEvent, ReactNode } from 'react';
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 
-export default function TransitionLink({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
+export default function TransitionLink({ href, className, style, children }: { href: string; className?: string; style?: CSSProperties; children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -19,5 +19,5 @@ export default function TransitionLink({ href, className, children }: { href: st
     window.setTimeout(() => router.push(href), 260);
   };
 
-  return <a className={className} href={href} onClick={handleClick}>{children}</a>;
+  return <a className={className} style={style} href={href} onClick={handleClick}>{children}</a>;
 }
