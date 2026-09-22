@@ -8,7 +8,7 @@ import { professionRuDetails } from '@/data/professionRuDetails';
 import { explanationsRu } from '@/data/explanationsRu';
 
 type EnjoymentKey = 'yes' | 'so-so' | 'no' | 'skipped';
-type SavedAnswer = { score: number; enjoyment: EnjoymentKey; text: string };
+type SavedAnswer = { taskId: string; choice: number | null; score: number; enjoyment: EnjoymentKey; text: string };
 
 export default function TaskRunner({ profession }: { profession: Profession }) {
   const { language } = useLanguage();
@@ -55,7 +55,7 @@ export default function TaskRunner({ profession }: { profession: Profession }) {
   const continueToNext = () => {
     if (!submitted || !enjoyment || reviewing) return;
     const score = task.type === 'choice' ? (choice === task.answer ? 1 : 0) : (text.trim().length >= 20 ? 1 : 0);
-    const nextAnswers = [...answers, { score, enjoyment: enjoyment || 'skipped', text }];
+    const nextAnswers = [...answers, { taskId: task.id, choice, score, enjoyment: enjoyment || 'skipped', text }];
     if (step === profession.tasks.length - 1) {
       localStorage.setItem(`pathtry-${profession.slug}`, JSON.stringify({ step: 0, answers: nextAnswers }));
       document.body.classList.add('page-exit');
