@@ -3,10 +3,14 @@
 import { useEffect, useState } from 'react';
 import type { Profession } from '@/data/professions';
 import TransitionLink from '@/components/TransitionLink';
+import { professionRu, ui } from '@/data/translations';
+import { useLanguage } from '@/components/LanguageProvider';
 
 type SavedAnswer = { score: number; enjoyment: string };
 
 export default function ResultClient({ profession }: { profession: Profession }) {
+  const { language } = useLanguage();
+  const text = ui[language];
   const [result, setResult] = useState({ score: 0, enjoyment: 0, ready: false });
 
   useEffect(() => {
@@ -14,7 +18,7 @@ export default function ResultClient({ profession }: { profession: Profession })
       const saved = JSON.parse(localStorage.getItem(`pathtry-${profession.slug}`) || '{}');
       const answers: SavedAnswer[] = saved.answers || [];
       const score = answers.reduce((total, answer) => total + answer.score, 0);
-      const values: Record<string, number> = { Yes: 2, 'So-so': 1, No: 0 };
+      const values: Record<string, number> = language === 'ru' ? { Да: 2, 'Так себе': 1, Нет: 0 } : { Yes: 2, 'So-so': 1, No: 0 };
       const enjoyment = answers.length
         ? Math.round(answers.reduce((total, answer) => total + (values[answer.enjoyment] || 0), 0) / answers.length * 50)
         : 0;
@@ -22,27 +26,24 @@ export default function ResultClient({ profession }: { profession: Profession })
     } catch {
       setResult((current) => ({ ...current, ready: true }));
     }
-  }, [profession.slug]);
+  }, [language, profession.slug]);
 
   const verdict = result.score >= 4 && result.enjoyment >= 65
-    ? 'Good fit'
+    ? text.good
     : result.score >= 3 || result.enjoyment >= 40
-      ? 'Explore more'
-      : 'Probably not for you';
-  const reason = verdict === 'Good fit'
-    ? 'You handled the work thoughtfully and your energy stayed with it.'
-    : verdict === 'Explore more'
-      ? 'Some parts clicked. A longer, real-world experiment could tell you more.'
-      : 'The tasks did not give you much energy today. That is useful information, not a final answer.';
+      ? text.exploreMore
+      : text.probably;
+  const localized = language === 'ru' ? professionRu[profession.slug] : profession;
+  const reason = verdict === text.good ? text.goodReason : verdict === text.exploreMore ? text.exploreReason : text.probablyReason;
 
   return <>
     <div className="result-hero">
-      <div><div className="kicker">Your PathTry snapshot</div><h1>{profession.title}</h1><p className="muted">A quick signal, not a label. Careers get clearer through trying.</p></div>
-      <div className="score-card"><span className="muted">Work score</span><div className="score">{result.score}/5</div><div className="verdict">{result.ready ? verdict : 'Reading your result...'}</div><span>{reason}</span><br /><span className="muted">Enjoyment: {result.enjoyment}%</span></div>
+      <div><div className="kicker">{text.snapshot}</div><h1>{localized.title}</h1><p className="muted">{text.resultText}</p></div>
+      <div className="score-card"><span className="muted">{text.workScore}</span><div className="score">{result.score}/5</div><div className="verdict">{result.ready ? verdict : text.reading}</div><span>{reason}</span><br /><span className="muted">{text.enjoyment}: {result.enjoyment}%</span></div>
     </div>
-    <div className="result-section"><h2>Subjects & exams</h2><div><p className="muted">Useful foundations for this path</p><div className="tag-list">{[...profession.subjects, ...profession.exams].map((item) => <span className="tag" key={item}>{item}</span>)}</div></div></div>
-    <div className="result-section"><h2>Typical majors</h2><div className="tag-list">{profession.majors.map((major) => <span className="tag" key={major}>{major}</span>)}</div></div>
-    <div className="result-section"><h2>Three next steps</h2><ol className="next-list">{profession.nextSteps.map((next) => <li key={next}>{next}</li>)}</ol></div>
-    <div className="result-actions"><TransitionLink className="btn btn-primary" href="/">Try another profession</TransitionLink><button className="btn btn-outline" onClick={() => window.print()}>Save as PDF</button></div>
+    <div className="result-section"><h2>{text.subjects}</h2><div><p className="muted">{text.foundations}</p><div className="tag-list">{[...profession.subjects, ...profession.exams].map((item) => <span className="tag" key={item}>{item}</span>)}</div></div></div>
+    <div className="result-section"><h2>{text.majors}</h2><div className="tag-list">{profession.majors.map((major) => <span className="tag" key={major}>{major}</span>)}</div></div>
+    <div className="result-section"><h2>{text.steps}</h2><ol className="next-list">{profession.nextSteps.map((next) => <li key={next}>{next}</li>)}</ol></div>
+    <div className="result-actions"><TransitionLink className="btn btn-primary" href="/">{text.another}</TransitionLink><button className="btn btn-outline" onClick={() => window.print()}>{text.pdf}</button></div>
   </>;
 }
