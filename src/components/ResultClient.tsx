@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import type { Profession } from '@/data/professions';
+import TransitionLink from '@/components/TransitionLink';
 
 type SavedAnswer = { score: number; enjoyment: string };
 
@@ -43,6 +43,6 @@ export default function ResultClient({ profession }: { profession: Profession })
     <div className="result-section"><h2>Subjects & exams</h2><div><p className="muted">Useful foundations for this path</p><div className="tag-list">{[...profession.subjects, ...profession.exams].map((item) => <span className="tag" key={item}>{item}</span>)}</div></div></div>
     <div className="result-section"><h2>Typical majors</h2><div className="tag-list">{profession.majors.map((major) => <span className="tag" key={major}>{major}</span>)}</div></div>
     <div className="result-section"><h2>Three next steps</h2><ol className="next-list">{profession.nextSteps.map((next) => <li key={next}>{next}</li>)}</ol></div>
-    <div className="result-actions"><Link className="btn btn-primary" href="/">Try another profession</Link><button className="btn btn-outline" onClick={() => window.print()}>Save as PDF</button></div>
+    <div className="result-actions"><TransitionLink className="btn btn-primary" href="/">Try another profession</TransitionLink><button className="btn btn-outline" onClick={() => window.print()}>Save as PDF</button></div>
   </>;
 }

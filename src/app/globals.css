@@ -35,3 +35,7 @@ html:not(.dark) { --surface:#ffffff; --surface-soft:#f2f5f1; }
 .feedback { background:var(--surface-soft); transition:background-color .45s ease, color .45s ease; }
 .btn, .profession-card, .option, .enjoy button, .tag, .back, .source-links a { transition:background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease, transform .25s ease; }
 .dark .hero-art { background:#203b35; }.dark .hero-card { box-shadow:0 18px 35px #00000045; }.dark .btn-outline { color:var(--ink); }.dark .option.selected { background:#422820; }.dark .option.correct { background:#173c35; }.dark .option.wrong { background:#452725; }
+.page-exit main, .page-exit .site-header, .page-exit .footer { animation: page-exit .26s ease both; pointer-events:none; }
+.task-box { animation: task-enter .48s cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes page-exit { to { opacity:0; transform:translateY(-10px); } }
+@keyframes task-enter { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
