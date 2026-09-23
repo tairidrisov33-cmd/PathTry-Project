@@ -58,17 +58,27 @@ async function breakdown(payload: Record<string, unknown>) {
 
   const profession = localize(definition, language);
   const result = scoreExperiment(answers, profession.tasks);
-  const lang = language === 'ru' ? 1 : 0;
-  const status = { good: 'pro move', partial: 'partly there', miss: 'missed', empty: 'not answered' };
-  const summary = [
+  // The summary is written in the student's language, so no English terms leak into a Russian reply.
+  const ru = language === 'ru';
+  const lang = ru ? 1 : 0;
+  const points = result.proMoves.toLocaleString(ru ? 'ru-RU' : 'en-GB', { maximumFractionDigits: 1 });
+  const status = ru ? { good: 'профессиональное решение', partial: 'частично', miss: 'мимо', empty: 'без ответа' } : { good: 'pro move', partial: 'partly there', miss: 'missed', empty: 'not answered' };
+  const felt: Record<string, string> = ru ? { yes: 'заряжало', 'so-so': 'нейтрально', no: 'утомило' } : { yes: 'energising', 'so-so': 'neutral', no: 'draining' };
+  const summary = (ru ? [
+    `Профессия: ${profession.title}`,
+    `Профессиональные решения: ${points} из ${result.total} (отвечено заданий: ${result.answered} из ${result.total})`,
+    `Совпадение с рабочим стилем: ${result.matchPercent}%`,
+    `Энергия: ${result.energy === null ? 'не оценена' : `${result.energy}% (оценено задач: ${result.ratedTasks})`}`,
+    `Сильные стороны: ${result.strengths.map((skill) => SKILL_LABELS[skill][lang]).join(', ')}`,
+    'Задания:'
+  ] : [
     `Profession: ${profession.title}`,
-    `Pro moves: ${result.proMoves} of ${result.total} (answered ${result.answered} of ${result.total})`,
+    `Pro moves: ${points} of ${result.total} (answered ${result.answered} of ${result.total})`,
     `Work-style match: ${result.matchPercent}%`,
     `Energy: ${result.energy === null ? 'not rated' : `${result.energy}% based on ${result.ratedTasks} rated tasks`}`,
     `Strongest skills: ${result.strengths.map((skill) => SKILL_LABELS[skill][lang]).join(', ')}`,
-    'Tasks:',
-    ...profession.tasks.map((task, index) => `- ${task.prompt} → ${status[result.steps[index].status]}${result.steps[index].enjoyment ? `, felt: ${result.steps[index].enjoyment}` : ''}`)
-  ].join('\n');
+    'Tasks:'
+  ]).concat(profession.tasks.map((task, index) => `- ${task.prompt} → ${status[result.steps[index].status]}${result.steps[index].enjoyment ? `, ${felt[result.steps[index].enjoyment!]}` : ''}`)).join('\n');
 
   try {
     const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), BREAKDOWN_TIMEOUT_MS));
