@@ -26,10 +26,24 @@ export default function HeroArt({ language, timer, taskLabel }: { language: Lang
   const [index, setIndex] = useState(0);
   const sample = samples[language][index];
 
+  // Rotate samples and run CSS loops only while the hero is on screen and the tab is visible.
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const id = window.setInterval(() => setIndex((current) => (current + 1) % samples.en.length), CYCLE_MS);
-    return () => window.clearInterval(id);
+    const hero = ref.current?.closest('.hero');
+    if (!hero) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let visible = true, id = 0;
+    const sync = () => {
+      const active = visible && !document.hidden;
+      hero.classList.toggle('is-paused', !active);
+      if (reduced) return;
+      if (active && !id) id = window.setInterval(() => setIndex((current) => (current + 1) % samples.en.length), CYCLE_MS);
+      if (!active && id) { window.clearInterval(id); id = 0; }
+    };
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
+    observer.observe(hero);
+    document.addEventListener('visibilitychange', sync);
+    sync();
+    return () => { observer.disconnect(); document.removeEventListener('visibilitychange', sync); window.clearInterval(id); };
   }, []);
 
   // Pointer-driven tilt and parallax, eased toward the target each frame.

@@ -53,15 +53,19 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine)').matches) return;
-    const onMove = (event: PointerEvent) => {
-      const surface = (event.target as HTMLElement | null)?.closest?.<HTMLElement>(SPOTLIGHT);
-      if (!surface) return;
+    // Coalesce pointer events to one style write per frame.
+    let frame = 0, last: PointerEvent | null = null;
+    const apply = () => {
+      frame = 0;
+      const surface = (last?.target as HTMLElement | null)?.closest?.<HTMLElement>(SPOTLIGHT);
+      if (!surface || !last) return;
       const rect = surface.getBoundingClientRect();
-      surface.style.setProperty('--mx', `${event.clientX - rect.left}px`);
-      surface.style.setProperty('--my', `${event.clientY - rect.top}px`);
+      surface.style.setProperty('--mx', `${last.clientX - rect.left}px`);
+      surface.style.setProperty('--my', `${last.clientY - rect.top}px`);
     };
+    const onMove = (event: PointerEvent) => { last = event; if (!frame) frame = requestAnimationFrame(apply); };
     document.addEventListener('pointermove', onMove, { passive: true });
-    return () => document.removeEventListener('pointermove', onMove);
+    return () => { document.removeEventListener('pointermove', onMove); cancelAnimationFrame(frame); };
   }, []);
 
   return <>
