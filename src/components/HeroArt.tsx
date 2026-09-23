@@ -5,17 +5,20 @@ import { professions } from '@/data/professions';
 import type { Language } from '@/data/translations';
 import Icon, { professionColors, professionIcons } from '@/components/Icon';
 
-// Rotating preview tasks from the featured profession (Software Developer), matching the hero banner.
+// Rotating preview tasks from different professions: the highlighted chip on the orbit jumps to the
+// profession of the question in the middle. It opens with Software Developer, the featured experiment.
 const samples: Record<Language, { slug: string; step: number; prompt: string; wrong: string; right: string }[]> = {
   en: [
     { slug: 'software-developer', step: 1, prompt: 'Signup works on your laptop but fails for some users. First move?', wrong: 'Rewrite the whole page', right: 'Ask for steps and the error' },
-    { slug: 'software-developer', step: 2, prompt: 'Fix a typo, speed up a slow checkout, or add an animation?', wrong: 'Add the animation', right: 'Speed up the checkout' },
-    { slug: 'software-developer', step: 7, prompt: 'The site breaks right after your release. What first?', wrong: 'Patch it live until it works', right: 'Roll back, then investigate' }
+    { slug: 'doctor', step: 2, prompt: 'A patient says they feel tired. What do you ask first?', wrong: '“You need more sleep.”', right: '“When did it start?”' },
+    { slug: 'designer', step: 3, prompt: 'Users miss the “Pay” button. What do you try first?', wrong: 'Make the logo bigger', right: 'Raise the button’s contrast' },
+    { slug: 'data-analyst', step: 1, prompt: 'Sales dropped 20% last week. Where do you start?', wrong: 'Blame the weather', right: 'Check the data for gaps' }
   ],
   ru: [
     { slug: 'software-developer', step: 1, prompt: 'Регистрация работает у тебя, но не у части пользователей. С чего начнёшь?', wrong: 'Перепишу всю страницу', right: 'Узнаю шаги и текст ошибки' },
-    { slug: 'software-developer', step: 2, prompt: 'Опечатка, медленная оплата или новая анимация — что первым?', wrong: 'Добавлю анимацию', right: 'Ускорю оплату' },
-    { slug: 'software-developer', step: 7, prompt: 'Сразу после релиза сайт сломался. Что делаешь первым?', wrong: 'Чиню прямо на живом сайте', right: 'Откатываю, потом разбираюсь' }
+    { slug: 'doctor', step: 2, prompt: 'Пациент жалуется на усталость. Что спросишь первым?', wrong: '«Вам нужно больше спать».', right: '«Когда это началось?»' },
+    { slug: 'designer', step: 3, prompt: 'Пользователи не замечают кнопку «Оплатить». Что сделаешь?', wrong: 'Увеличу логотип', right: 'Усилю контраст кнопки' },
+    { slug: 'data-analyst', step: 1, prompt: 'Продажи упали на 20% за неделю. С чего начнёшь?', wrong: 'Спишу на погоду', right: 'Проверю данные на пропуски' }
   ]
 };
 
