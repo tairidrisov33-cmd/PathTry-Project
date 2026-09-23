@@ -10,7 +10,7 @@ import LanguageToggle from '@/components/LanguageToggle';
 import AssistantWidget from '@/components/AssistantWidget';
 import Icon from '@/components/Icon';
 
-export const GITHUB_URL = 'https://github.com/tairidrisov33-cmd/VentureHack-Project1.0';
+export const GITHUB_URL = 'https://github.com/tairidrisov33-cmd/PathTry-Project';
 
 // Surfaces that get a cursor-following glow.
 const SPOTLIGHT = '.profession-card, .featured-hero, .option, .dashboard-panel, .recap-list li';
