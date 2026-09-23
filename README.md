@@ -131,6 +131,7 @@ The end-to-end test answers every task, waits for PathFinder's review, and fails
 | `GROQ_API_KEY` | No | Free alternative: PathFinder on an open model via Groq's free tier (no card needed, key at console.groq.com). Several models are tried automatically; set `FREE_AI_MODEL` to pick one. |
 | `FREE_AI_API_KEY`, `FREE_AI_BASE_URL`, `FREE_AI_MODEL` | No | Any other OpenAI-compatible provider instead of Groq (e.g. Gemini: `https://generativelanguage.googleapis.com/v1beta/openai`, model `gemini-2.5-flash`). |
 | `RESEND_API_KEY`, `LEADS_EMAIL_TO`, `LEADS_EMAIL_FROM` | No | Roadmap and partner requests arrive by email via [Resend](https://resend.com). `LEADS_EMAIL_TO` is the inbox (comma-separated for several); `LEADS_EMAIL_FROM` is a sender on a domain verified in Resend. |
+| `GOOGLE_SITE_VERIFICATION`, `YANDEX_VERIFICATION` | No | Verification codes from Google Search Console and Yandex Webmaster (HTML tag method); rendered as meta tags on every page. |
 | `LEADS_WEBHOOK_URL` | No | Roadmap and partner requests are also POSTed here as JSON (Make, Zapier, Google Apps Script, a Telegram bot…). Without email or a webhook, only anonymous lead metadata is logged. |
 
 With no AI key at all, PathFinder still works: answers are graded against task criteria, the chat answers from the catalogue, and the result breakdown is built from the score.

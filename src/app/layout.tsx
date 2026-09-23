@@ -16,7 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: 'PathTry',
     alternates: pageAlternates('/'),
     openGraph: { type: 'website', siteName: 'PathTry', title, description, url: '/', locale: ru ? 'ru_RU' : 'en_US', alternateLocale: ru ? 'en_US' : 'ru_RU' },
-    twitter: { card: 'summary_large_image', title, description }
+    twitter: { card: 'summary_large_image', title, description },
+    // Ownership tags for Google Search Console and Yandex Webmaster, set in Vercel env vars.
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+      yandex: process.env.YANDEX_VERIFICATION || undefined
+    }
   };
 }
 export const viewport: Viewport = { themeColor: [{ media: '(prefers-color-scheme: light)', color: '#f7f8f3' }, { media: '(prefers-color-scheme: dark)', color: '#121917' }] };
