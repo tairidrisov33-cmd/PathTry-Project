@@ -9,6 +9,7 @@ import ProfessionExplorer from '@/components/ProfessionExplorer';
 import LeadCapture from '@/components/LeadCapture';
 import Icon, { professionColors, professionIcons, type IconName } from '@/components/Icon';
 import HeroArt from '@/components/HeroArt';
+import { Comparison, ValidationSection, WhyItMatters } from '@/components/EvidenceSections';
 
 // Words wrapped in *asterisks* get the accent highlight; each word rises in on its own beat.
 function HeroTitle({ title }: { title: string }) {
@@ -60,8 +61,11 @@ export default function Home() {
       <HeroArt language={language} timer={text.heroTimer} taskLabel={(step) => ru ? `Задание ${step} из 10` : `Task ${step} of 10`} />
     </section>
     <section className="stats-strip" aria-label={ru ? 'PathTry в цифрах' : 'PathTry at a glance'}>{stats.map((item) => <div className="stat" key={item.label}><span className="stat-icon"><Icon name={item.icon} size={18} /></span><div><strong>{item.value}</strong><span>{item.label}</span></div></div>)}</section>
+    <WhyItMatters language={language} />
     <section className="section" data-reveal><div className="section-head"><div><div className="kicker">{text.howKicker}</div><h2>{text.howTitle}</h2></div><span className="muted">{text.built}</span></div><div className="steps">{steps.map((step, index) => <div className="step" key={step.title}><div className="step-top"><span className="step-num">0{index + 1}</span><span className="step-icon"><Icon name={step.icon} size={20} /></span></div><h3>{step.title}</h3><p>{step.body}</p></div>)}</div></section>
+    <Comparison language={language} />
     <section className="section" id="professions" data-reveal><div className="section-head"><div><div className="kicker">{text.choose}</div><h2>{text.paths}</h2></div><span className="muted">{text.count}</span></div><ProfessionExplorer /></section>
+    <ValidationSection language={language} />
     <section className="section partners" id="partners" data-reveal>
       <div className="section-head"><div><div className="kicker">B2B · {ru ? 'Партнёрство' : 'Partnerships'}</div><h2>{ru ? 'Для вузов и EdTech' : 'For universities & EdTech'}</h2></div><span className="muted">{ru ? 'Модель монетизации PathTry' : 'How PathTry makes money'}</span></div>
       <div className="partner-grid">{partnerValue.map((item) => <div className="partner-card" key={item.title}><span className="step-icon"><Icon name={item.icon} size={20} /></span><h3>{item.title}</h3><p>{item.body}</p></div>)}</div>

@@ -4,12 +4,19 @@ import TransitionLink from '@/components/TransitionLink';
 import { useLanguage } from '@/components/LanguageProvider';
 import { GITHUB_URL } from '@/components/SiteChrome';
 import Icon, { type IconName } from '@/components/Icon';
+import { ValidationSection } from '@/components/EvidenceSections';
 
 const TEAM: { name: string; role: [string, string]; url?: string }[] = [
-  { name: 'Tair Idrissov', role: ['Team Captain · Lead Developer (built most of the product)', 'Капитан команды · ведущий разработчик (сделал большую часть продукта)'], url: 'https://github.com/tairidrisov33-cmd' },
+  { name: 'Tair Idrissov', role: ['Team Captain & Lead Developer', 'Капитан команды и ведущий разработчик'], url: 'https://github.com/tairidrisov33-cmd' },
   { name: 'Damir Omar', role: ['Web Developer', 'Веб-разработчик'] },
   { name: 'Amelya Leonova', role: ['Pitch & Presentation Lead', 'Автор презентации и питча'] },
   { name: 'Arlan Sharipov', role: ['Pitch Co-author', 'Соавтор презентации'] }
+];
+
+const ROADMAP: { stage: [string, string]; now?: boolean; items: [string, string][] }[] = [
+  { stage: ['Now', 'Сейчас'], now: true, items: [['15 professions, 150 tasks', '15 профессий, 150 задач'], ['English and Russian', 'Английский и русский'], ['PathFinder AI mentor', 'AI-наставник PathFinder']] },
+  { stage: ['Next', 'Далее'], items: [['50+ professions', '50+ профессий'], ['Kazakh language', 'Казахский язык'], ['Dashboard for school counsellors', 'Кабинет школьного профориентатора']] },
+  { stage: ['Later', 'Потом'], items: [['University programme matching', 'Подбор программ вузов'], ['Challenges from real employers', 'Задания от реальных работодателей']] }
 ];
 
 export default function AboutContent({ professionCount, taskCount }: { professionCount: number; taskCount: number }) {
@@ -33,6 +40,9 @@ export default function AboutContent({ professionCount, taskCount }: { professio
     <TransitionLink className="back" href="/"><Icon name="arrowLeft" size={15} />{ru ? 'На главную' : 'Home'}</TransitionLink>
     <div className="about-hero"><div className="kicker" style={{ marginTop: 40 }}>{ru ? 'О проекте' : 'About'}</div><h1>{ru ? 'Попробуй профессию, прежде чем выбрать её' : 'Try a profession before you choose it'}</h1><p>{ru ? 'PathTry — сервис микро-профориентации: 10 минут реальных рабочих задач вместо догадок о будущей профессии.' : 'PathTry is micro career exploration: ten minutes of real work tasks instead of guessing about your future job.'}</p></div>
     {sections.map((section) => <section className="about-section" key={section.title}><h2><span className="section-icon"><Icon name={section.icon} size={18} /></span>{section.title}</h2><div>{section.body}</div></section>)}
+    <section className="about-section"><h2><span className="section-icon"><Icon name="route" size={18} /></span>{ru ? 'Дорожная карта' : 'Roadmap'}</h2><ol className="roadmap">{ROADMAP.map((stage) => <li className={stage.now ? 'is-now' : ''} key={stage.stage[0]}><span className="roadmap-stage">{stage.stage[lang]}</span><ul>{stage.items.map((item) => <li key={item[0]}>{item[lang]}</li>)}</ul></li>)}</ol></section>
+    <section className="about-section"><h2><span className="section-icon"><Icon name="building" size={18} /></span>{ru ? 'Бизнес-модель' : 'Business model'}</h2><div className="business-model"><div><strong>{ru ? 'Бесплатно для школьников' : 'Free for students'}</strong><p>{ru ? 'Все профессии, PathFinder и результат — без оплаты и регистрации. Так мы убираем барьер для тех, кому профориентация нужнее всего.' : 'Every profession, PathFinder and the result are free with no sign-up, so the students who need guidance most face no barrier.'}</p></div><div><strong>{ru ? 'Платят вузы, школы и EdTech' : 'Universities, schools & EdTech pay'}</strong><p>{ru ? 'Анонимная аналитика интересов абитуриентов, брендированные эксперименты по их программам и пилоты для школ и профориентаторов.' : 'Anonymous analytics on applicant interests, branded experiments built around their programmes, and pilots for schools and career counsellors.'}</p></div></div></section>
+    <ValidationSection language={language} />
     <section className="about-section"><h2><span className="section-icon"><Icon name="users" size={18} /></span>{ru ? 'Команда' : 'Team'}</h2><div className="about-team">{TEAM.map((member) => member.url ? <a href={member.url} target="_blank" rel="noreferrer" key={member.name}><strong>{member.name}</strong><span>{member.role[lang]}</span></a> : <div key={member.name}><strong>{member.name}</strong><span>{member.role[lang]}</span></div>)}</div></section>
     <div className="about-cta"><TransitionLink className="btn btn-primary" href="/#professions">{ru ? 'Попробовать профессию' : 'Try a profession'}<Icon name="arrowRight" size={16} /></TransitionLink><a className="btn btn-outline" href={GITHUB_URL} target="_blank" rel="noreferrer"><Icon name="code" size={16} />GitHub</a></div>
   </main>;

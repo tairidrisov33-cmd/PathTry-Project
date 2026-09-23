@@ -775,3 +775,75 @@ html.js [data-reveal]:not(.is-in), html.js [data-reveal]:not(.is-in) *, html.js 
 .verification-qr svg { display:block; width:76px; height:76px; }
 .verification-qr { line-height:0; }
 @media print { html, html.dark { color-scheme:light !important; background:#fff !important; } }
+
+/* ---- Final release: evidence sections, result states, tap targets ---- */
+.impact-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+.impact-card { display:flex; flex-direction:column; gap:10px; padding:24px; border:1px solid var(--line); border-radius:20px; background:var(--surface); }
+.impact-card strong { font-size:44px; line-height:1; letter-spacing:-1.5px; color:var(--coral); }
+.impact-card p { margin:0; color:var(--ink); font-size:15px; line-height:1.5; }
+.impact-card a { display:inline-flex; align-items:center; gap:4px; margin-top:auto; min-height:32px; color:var(--muted); font-size:12px; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.impact-card a:hover { color:var(--coral); }
+.compare-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:20px; background:var(--surface); }
+.compare-table { width:100%; border-collapse:collapse; font-size:14px; }
+.compare-table th, .compare-table td { padding:14px 16px; border-bottom:1px solid var(--line); text-align:center; }
+.compare-table tbody tr:last-child th, .compare-table tbody tr:last-child td { border-bottom:0; }
+.compare-table thead th { color:var(--muted); font-size:12px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; }
+.compare-table tbody th { text-align:left; font-weight:700; }
+.compare-table .is-us { background:color-mix(in srgb, var(--coral) 9%, transparent); }
+.compare-table thead .is-us { color:var(--coral); }
+.mark { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:50%; }
+.mark-yes .mark { color:#fff; background:var(--teal); }
+.mark-no .mark { color:var(--muted); background:color-mix(in srgb, var(--muted) 16%, transparent); }
+.mark-partly .mark { color:#8a5a00; background:var(--gold-soft); }
+.dark .mark-partly .mark { color:#f8c66e; background:#3a3020; }
+.quote-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px; }
+.quote-card { margin:0; padding:22px; border:1px solid var(--line); border-radius:20px; background:var(--surface); }
+.quote-card blockquote { margin:0 0 10px; font-size:16px; line-height:1.55; }
+.quote-card figcaption { color:var(--muted); font-size:13px; }
+.roadmap { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin:0; padding:0; list-style:none; }
+.roadmap > li { padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+.roadmap > li.is-now { border-color:var(--coral); box-shadow:0 0 0 3px color-mix(in srgb, var(--coral) 14%, transparent); }
+.roadmap-stage { display:inline-block; margin-bottom:8px; color:var(--coral); font-size:12px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+.roadmap ul { margin:0; padding-left:18px; color:var(--ink); font-size:14px; line-height:1.6; }
+.business-model { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.business-model > div { padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+.business-model p { margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.55; }
+.partial-notice { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:22px; padding:12px 16px; border:1px solid color-mix(in srgb, var(--gold) 55%, var(--line)); border-radius:14px; background:var(--gold-soft); color:#5d4300; font-size:14px; font-weight:600; }
+.dark .partial-notice { background:#2e2718; color:#f8dca0; }
+.partial-notice a { display:inline-flex; align-items:center; gap:5px; min-height:40px; margin-left:auto; color:var(--coral); font-weight:800; }
+.ai-text { margin-top:14px; }
+.ai-text p { margin:0; color:#e6efe9; font-size:15px; line-height:1.6; animation:fade-in .5s ease both; }
+.ai-text small { display:block; margin-top:8px; color:#9fb3aa; font-size:11px; }
+.enjoy-basis { display:block; margin-top:6px; color:#9fb3aa; font-size:11px; }
+.lead-check { display:flex; align-items:flex-start; gap:10px; min-height:40px; color:var(--muted); font-size:13px; line-height:1.45; cursor:pointer; }
+.lead-check input { flex:none; width:20px; height:20px; margin:1px 0 0; accent-color:var(--coral); cursor:pointer; }
+@keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+/* The floating PathFinder button never covers the last actions on task and result pages. */
+.try-shell, .result-shell { padding-bottom:140px; }
+/* Tap targets of at least 40px. */
+.footer-link, .explore-link, .to-top { min-height:40px; }
+.language-toggle button { min-width:36px; min-height:30px; }
+@media (max-width:760px), (pointer:coarse) {
+  .language-toggle button { min-width:40px; min-height:40px; font-size:12px; }
+  .theme-toggle { min-width:40px; min-height:40px; }
+  .footer-nav { gap:4px 14px; }
+}
+@media (max-width:860px) { .impact-grid, .roadmap, .business-model { grid-template-columns:1fr; } .impact-card strong { font-size:38px; } }
+@media (max-width:520px) { .compare-table { font-size:13px; } .compare-table th, .compare-table td { padding:12px 8px; } .compare-table thead th { font-size:10.5px; letter-spacing:0; } }
+@media print { .partial-notice a, .lead-check { display:none !important; } .try-shell, .result-shell { padding-bottom:0; } }
+/* The hero glow stays within the page width, so it never causes sideways scroll. */
+.hero::before { inset:-140px 0 auto; }
+@media (max-width:420px) {
+  .header-tools { gap:8px; }
+  .site-header { padding-left:16px; padding-right:16px; }
+  .compare-table { table-layout:fixed; }
+  .compare-table th:first-child { width:36%; }
+  .compare-table thead th { text-transform:none; font-size:11.5px; }
+}
+/* Slide-in animations and decorative glows are clipped, so phones never scroll sideways. */
+main { overflow-x:clip; }
+.about-section ol.roadmap { list-style:none; padding:0; }
+.about-section .roadmap > li + li { margin-top:0; }
+.mark-dash { display:block; width:12px; height:2.5px; border-radius:2px; background:currentColor; }
+/* In the stacked phone layout a flex-basis would become height: keep the contact field one line tall. */
+@media (max-width:760px) { .lead-row .lead-field { flex:none; } }
