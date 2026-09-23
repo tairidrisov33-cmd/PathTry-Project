@@ -11,6 +11,11 @@ import Icon, { professionColors, professionIcons, type IconName } from '@/compon
 import HeroArt from '@/components/HeroArt';
 import { Comparison, ValidationSection, WhyItMatters } from '@/components/EvidenceSections';
 
+const STRUCTURED_DATA = JSON.stringify([
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'PathTry', alternateName: ['Path Try', 'pathtry.site'], url: 'https://pathtry.site/' },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: 'PathTry', url: 'https://pathtry.site/', logo: 'https://pathtry.site/icon-512.png' }
+]);
+
 // Words wrapped in *asterisks* get the accent highlight; each word rises in on its own beat.
 function HeroTitle({ title }: { title: string }) {
   const words = title.split(/(\*[^*]+\*)/).filter(Boolean).flatMap((part) => part.startsWith('*') ? [{ word: part.slice(1, -1), accent: true }] : part.trim().split(/\s+/).filter(Boolean).map((word) => ({ word, accent: false })));
@@ -41,6 +46,8 @@ export default function Home() {
   ];
 
   return <main>
+    {/* Site name and logo for search results (Google "site name" and knowledge panel). */}
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
     <section className="hero">
       <div className="hero-copy">
         <div className="kicker"><span className="kicker-dot" />{text.kicker}</div>
