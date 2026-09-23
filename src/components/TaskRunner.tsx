@@ -5,21 +5,13 @@ import { localize, storageKey, type ProfessionDef } from '@/data/catalog/helpers
 import { ui } from '@/data/translations';
 import { useLanguage } from '@/components/LanguageProvider';
 import { gradeOffline, type Review, type Verdict } from '@/lib/grader';
+import { energyLevel, scoreExperiment, type EnjoymentKey, type SavedAnswer } from '@/lib/scoring';
 import { askPathfinder, setTaskContext } from '@/lib/taskContext';
 import { track } from '@vercel/analytics';
 import Icon, { type IconName } from '@/components/Icon';
 
-type EnjoymentKey = 'yes' | 'so-so' | 'no' | 'skipped';
-export type SavedAnswer = { taskId: string; choice: number | null; score: number; enjoyment: EnjoymentKey; text: string; verdict?: Verdict };
-
 const letters = ['A', 'B', 'C', 'D', 'E'];
-const energyValue: Record<string, number> = { yes: 100, 'so-so': 55, no: 15 };
 const verdictIcon: Record<Verdict, IconName> = { strong: 'sparkle', partial: 'route', offtopic: 'target', empty: 'pencil' };
-
-export function energyLevel(ratings: string[]) {
-  const rated = ratings.filter((rating) => rating in energyValue);
-  return rated.length ? Math.round(rated.reduce((total, rating) => total + energyValue[rating], 0) / rated.length) : null;
-}
 
 export default function TaskRunner({ definition }: { definition: ProfessionDef }) {
   const { language } = useLanguage();
@@ -93,15 +85,17 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
     localStorage.setItem(key, JSON.stringify({ answers: nextAnswers }));
     if (isLast) {
       setLeaving(true);
-      track('experiment_completed', { profession: definition.slug, score: nextAnswers.reduce((sum, answer) => sum + answer.score, 0), total, language });
+      track('experiment_completed', { profession: definition.slug, score: scoreExperiment(nextAnswers, profession.tasks).proMoves, total, language });
       sessionStorage.setItem('pathtry-celebrate', definition.slug);
       document.body.classList.add('page-exit');
       window.setTimeout(() => { window.location.href = `/result/${definition.slug}`; }, 260);
       return;
     }
     setAnswers(nextAnswers); setStep(step + 1); setChoice(null); setText(''); setEnjoyment(null); setSubmitted(false); setReview(null); setShowHint(false);
-    window.scrollTo({ top: Math.max(0, (document.querySelector('.task-meta') as HTMLElement | null)?.offsetTop ?? 0) - 90, behavior: 'smooth' });
-  }, [submitted, reviewing, leaving, task, choice, text, review, answers, enjoyment, isLast, key, definition.slug, step, total, language]);
+    // Land just below the sticky header, whatever its height at this screen width.
+    const header = (document.querySelector('.header-shell') as HTMLElement | null)?.offsetHeight ?? 80;
+    window.scrollTo({ top: Math.max(0, ((document.querySelector('.task-meta') as HTMLElement | null)?.offsetTop ?? 0) - header - 12), behavior: 'smooth' });
+  }, [submitted, reviewing, leaving, task, choice, text, review, answers, enjoyment, isLast, key, definition.slug, step, total, language, profession.tasks]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {

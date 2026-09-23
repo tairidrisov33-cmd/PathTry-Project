@@ -45,13 +45,14 @@ export function gradeOffline(answer: string, task: GradableTask, language: Langu
   const reasoned = REASON.test(clean);
   const specific = SPECIFIC.test(clean);
 
-  if (relevance < 1) {
+  // A taster for school students, not an exam: long, coherent answers get the benefit of the doubt.
+  if (relevance < 0.5 && words.length < 15) {
     return { verdict: 'offtopic', score: 0, source: 'rubric',
       feedback: ru ? 'Похоже, ответ не связан с заданием — в нём нет ничего о том, о чём спрашивали.' : 'This does not seem to answer the task — it does not touch on what was asked.',
       tip: ru ? `Перечитай задание. ${task.hint}` : `Re-read the task. ${task.hint}` };
   }
 
-  const strong = relevance >= 2 && words.length >= 8 && (reasoned || specific || relevance >= 4);
+  const strong = (relevance >= 1 && words.length >= 6) || (relevance >= 0.5 && words.length >= 15) || (relevance >= 2 && words.length >= 4);
   // Quote the student's own words that matched, not the internal keyword stems.
   const tokens = clean.split(/[^\p{L}\d-]+/u).filter(Boolean);
   const shown = [...new Set(matched.map((keyword) => keyword.replace(/[^\p{L}\d ]/gu, '').trim().toLowerCase()).filter((keyword) => keyword.length >= 3).map((keyword) => tokens.find((token) => token.toLowerCase().includes(keyword))).filter((word): word is string => Boolean(word)))].slice(0, 3);
@@ -64,7 +65,7 @@ export function gradeOffline(answer: string, task: GradableTask, language: Langu
       tip: extra.trim() || (ru ? 'Так рассуждают специалисты — сравни с примером ниже.' : 'That is how professionals reason — compare with the example below.') };
   }
 
-  const missing = words.length < 8 ? (ru ? 'Разверни мысль: сейчас ответ слишком короткий для оценки по сути.' : 'Expand the thought: right now it is too brief to judge on substance.') : !reasoned && !specific ? (ru ? 'Добавь причину («потому что…») или конкретный пример.' : 'Add a reason (“because…”) or a concrete example.') : (ru ? 'Добавь ещё одну деталь, которая прямо отвечает на задание.' : 'Add one more detail that directly answers the task.');
+  const missing = words.length < 6 ? (ru ? 'Разверни мысль: сейчас ответ слишком короткий для оценки по сути.' : 'Expand the thought: right now it is too brief to judge on substance.') : !reasoned && !specific ? (ru ? 'Добавь причину («потому что…») или конкретный пример.' : 'Add a reason (“because…”) or a concrete example.') : (ru ? 'Добавь ещё одну деталь, которая прямо отвечает на задание.' : 'Add one more detail that directly answers the task.');
   return { verdict: 'partial', score: 0.5, source: 'rubric',
     feedback: (ru ? 'Направление верное, но ответ пока неполный.' : 'Right direction, but not complete yet.') + covered,
     tip: `${missing} ${ru ? 'Что ищут в хорошем ответе:' : 'What a strong answer includes:'} ${task.criteria}` };

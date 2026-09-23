@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
+// Animates from 0 to the target, but always lands on the exact target: requestAnimationFrame
+// never fires in background tabs, headless screenshots or print, so a timer finishes the job.
 export function useCountUp(target: number, duration = 1100, decimals = 0) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(target);
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setValue(target); return; }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.visibilityState !== 'visible') { setValue(target); return; }
     const factor = 10 ** decimals;
     let frame = 0;
     const start = performance.now();
@@ -14,8 +16,10 @@ export function useCountUp(target: number, duration = 1100, decimals = 0) {
       setValue(Math.round(target * (1 - Math.pow(1 - progress, 3)) * factor) / factor);
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
+    setValue(0);
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    const finish = window.setTimeout(() => { cancelAnimationFrame(frame); setValue(target); }, duration + 150);
+    return () => { cancelAnimationFrame(frame); window.clearTimeout(finish); };
   }, [target, duration, decimals]);
   return value;
 }
