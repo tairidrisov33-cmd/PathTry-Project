@@ -17,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: pageAlternates('/'),
     openGraph: { type: 'website', siteName: 'PathTry', title, description, url: '/', locale: ru ? 'ru_RU' : 'en_US', alternateLocale: ru ? 'en_US' : 'ru_RU' },
     twitter: { card: 'summary_large_image', title, description },
-    // Ownership tags for Google Search Console and Yandex Webmaster, set in Vercel env vars.
+    // Ownership tags for Google Search Console and Yandex Webmaster (public by design; env vars override).
     verification: {
-      google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+      google: process.env.GOOGLE_SITE_VERIFICATION || 'XGqG-trItOiDPONPW3Ps94e12ogEqvPjBQKJbMqRkc8',
       yandex: process.env.YANDEX_VERIFICATION || undefined
     }
   };
