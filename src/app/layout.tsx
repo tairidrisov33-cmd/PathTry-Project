@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
+import { Manrope } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import SiteChrome from '@/components/SiteChrome';
@@ -24,10 +25,13 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   };
 }
+// Self-hosted at build time: no render-blocking request to Google Fonts. Cyrillic-ext covers Kazakh letters.
+const manrope = Manrope({ subsets: ['latin', 'cyrillic', 'cyrillic-ext'], weight: ['400', '500', '600', '700', '800'], display: 'swap', variable: '--font-manrope' });
+
 export const viewport: Viewport = { themeColor: [{ media: '(prefers-color-scheme: light)', color: '#f7f8f3' }, { media: '(prefers-color-scheme: dark)', color: '#121917' }] };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   // Rendering in the visitor's language on the server avoids a flash of English on every page load.
   const language = await serverLanguage();
-  return <html lang={language} data-language={language} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js'); try { if (localStorage.getItem('pathtry-theme') === 'dark') { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } } catch {}` }} /></head><body><LanguageProvider initialLanguage={language}><SiteChrome>{children}</SiteChrome></LanguageProvider><Analytics /></body></html>;
+  return <html lang={language} data-language={language} className={manrope.variable} suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js'); try { if (localStorage.getItem('pathtry-theme') === 'dark') { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } } catch {}` }} /></head><body><LanguageProvider initialLanguage={language}><SiteChrome>{children}</SiteChrome></LanguageProvider><Analytics /></body></html>;
 }
