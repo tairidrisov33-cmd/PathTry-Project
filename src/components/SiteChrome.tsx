@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ui } from '@/data/translations';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -9,10 +10,10 @@ import LanguageToggle from '@/components/LanguageToggle';
 import AssistantWidget from '@/components/AssistantWidget';
 import Icon from '@/components/Icon';
 
-// Surfaces that get a cursor-following glow.
 export const GITHUB_URL = 'https://github.com/tairidrisov33-cmd/VentureHack-Project1.0';
 
-const SPOTLIGHT ='.profession-card, .featured-inline, .option, .dashboard-panel, .recap-list li';
+// Surfaces that get a cursor-following glow.
+const SPOTLIGHT = '.profession-card, .featured-hero, .option, .dashboard-panel, .recap-list li';
 
 function LogoMark() {
   return <span className="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="18" r="2" /><path d="M8 18h7a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7" /><path d="m15 1.5 2.5 2.5L15 6.5" /></svg></span>;
@@ -72,9 +73,9 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   return <>
     <div className="scroll-progress" ref={progressRef} aria-hidden="true" />
-    <div className="header-shell" ref={headerRef}><header className="site-header"><a className="logo" href="/"><LogoMark />path<span>try</span></a><div className="header-tools"><span className="header-note">{text.headerNote}</span><LanguageToggle /><ThemeToggle /></div></header></div>
+    <div className="header-shell" ref={headerRef}><header className="site-header"><Link className="logo" href="/"><LogoMark />path<span>try</span></Link><div className="header-tools"><span className="header-note">{text.headerNote}</span><LanguageToggle /><ThemeToggle /></div></header></div>
     {children}
-    <footer className="footer"><div className="footer-brand"><span className="logo"><LogoMark />path<span>try</span></span><span>{text.footer}</span><nav className="footer-nav" aria-label={language === 'ru' ? 'Ссылки' : 'Links'}><a className="footer-link" href="/about"><Icon name="book" size={14} />{language === 'ru' ? 'О проекте' : 'About'}</a><a className="footer-link" href="/#partners"><Icon name="building" size={14} />{language === 'ru' ? 'Для вузов и EdTech' : 'For universities & EdTech'}</a><a className="footer-link" href={GITHUB_URL} target="_blank" rel="noreferrer"><Icon name="code" size={14} />GitHub</a></nav></div><button className="to-top" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><Icon name="arrowUp" size={15} />{language === 'ru' ? 'Наверх' : 'Back to top'}</button></footer>
+    <footer className="footer"><div className="footer-brand"><span className="logo"><LogoMark />path<span>try</span></span><span>{text.footer}</span><nav className="footer-nav" aria-label={language === 'ru' ? 'Ссылки' : 'Links'}><Link className="footer-link" href="/about"><Icon name="book" size={14} />{language === 'ru' ? 'О проекте' : 'About'}</Link><Link className="footer-link" href="/#partners"><Icon name="building" size={14} />{language === 'ru' ? 'Для вузов и EdTech' : 'For universities & EdTech'}</Link><a className="footer-link" href={GITHUB_URL} target="_blank" rel="noreferrer"><Icon name="code" size={14} />GitHub</a></nav></div><button className="to-top" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><Icon name="arrowUp" size={15} />{language === 'ru' ? 'Наверх' : 'Back to top'}</button></footer>
     <AssistantWidget />
   </>;
 }

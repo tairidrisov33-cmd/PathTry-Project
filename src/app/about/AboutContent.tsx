@@ -5,8 +5,12 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { GITHUB_URL } from '@/components/SiteChrome';
 import Icon, { type IconName } from '@/components/Icon';
 
-// Edit this list to present the team.
-const TEAM = [{ name: '@tairidrisov33-cmd', role: ['Founder · product & development', 'Основатель · продукт и разработка'], url: 'https://github.com/tairidrisov33-cmd' }];
+const TEAM: { name: string; role: [string, string]; url?: string }[] = [
+  { name: 'Tair Idrissov', role: ['Team Captain · Lead Developer (built most of the product)', 'Капитан команды · ведущий разработчик (сделал большую часть продукта)'], url: 'https://github.com/tairidrisov33-cmd' },
+  { name: 'Damir Omar', role: ['Web Developer', 'Веб-разработчик'] },
+  { name: 'Amelya Leonova', role: ['Pitch & Presentation Lead', 'Автор презентации и питча'] },
+  { name: 'Arlan Sharipov', role: ['Pitch Co-author', 'Соавтор презентации'] }
+];
 
 export default function AboutContent({ professionCount, taskCount }: { professionCount: number; taskCount: number }) {
   const { language } = useLanguage();
@@ -29,7 +33,7 @@ export default function AboutContent({ professionCount, taskCount }: { professio
     <TransitionLink className="back" href="/"><Icon name="arrowLeft" size={15} />{ru ? 'На главную' : 'Home'}</TransitionLink>
     <div className="about-hero"><div className="kicker" style={{ marginTop: 40 }}>{ru ? 'О проекте' : 'About'}</div><h1>{ru ? 'Попробуй профессию, прежде чем выбрать её' : 'Try a profession before you choose it'}</h1><p>{ru ? 'PathTry — сервис микро-профориентации: 10 минут реальных рабочих задач вместо догадок о будущей профессии.' : 'PathTry is micro career exploration: ten minutes of real work tasks instead of guessing about your future job.'}</p></div>
     {sections.map((section) => <section className="about-section" key={section.title}><h2><span className="section-icon"><Icon name={section.icon} size={18} /></span>{section.title}</h2><div>{section.body}</div></section>)}
-    <section className="about-section"><h2><span className="section-icon"><Icon name="users" size={18} /></span>{ru ? 'Команда' : 'Team'}</h2><div className="about-team">{TEAM.map((member) => <a href={member.url} target="_blank" rel="noreferrer" key={member.name}><strong>{member.name}</strong><span>{member.role[lang]}</span></a>)}</div></section>
+    <section className="about-section"><h2><span className="section-icon"><Icon name="users" size={18} /></span>{ru ? 'Команда' : 'Team'}</h2><div className="about-team">{TEAM.map((member) => member.url ? <a href={member.url} target="_blank" rel="noreferrer" key={member.name}><strong>{member.name}</strong><span>{member.role[lang]}</span></a> : <div key={member.name}><strong>{member.name}</strong><span>{member.role[lang]}</span></div>)}</div></section>
     <div className="about-cta"><TransitionLink className="btn btn-primary" href="/#professions">{ru ? 'Попробовать профессию' : 'Try a profession'}<Icon name="arrowRight" size={16} /></TransitionLink><a className="btn btn-outline" href={GITHUB_URL} target="_blank" rel="noreferrer"><Icon name="code" size={16} />GitHub</a></div>
   </main>;
 }

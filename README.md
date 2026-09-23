@@ -81,6 +81,15 @@ npm run dev
 
 Open http://localhost:3000. Production build: `npm run build && npm start`.
 
+### Quality checks
+
+```bash
+npm run lint       # ESLint (Next.js core-web-vitals + TypeScript rules)
+npm run test:e2e   # plays all 15 professions in headless Chrome (dev server must be running)
+```
+
+The end-to-end test answers every task, waits for PathFinder's review, and fails on broken steps, console errors, horizontal overflow on a 390 px phone screen, or untranslated English text in Russian mode. Options: `LANG_UI=en`, `WIDTH=1280`, `BASE_URL=https://…`, `SLUGS=doctor,nurse`, `CHROME_PATH=…` (Node.js 22+).
+
 ## Environment variables
 
 | Variable | Required | Purpose |
@@ -112,4 +121,9 @@ src/lib/            PathFinder (Claude + offline), grader, security, lead valida
 
 ## Team
 
-- [@tairidrisov33-cmd](https://github.com/tairidrisov33-cmd) — founder, product and development
+| Name | Role |
+| --- | --- |
+| **Tair Idrissov** ([@tairidrisov33-cmd](https://github.com/tairidrisov33-cmd)) | Team Captain · Lead Developer — built most of the product |
+| **Damir Omar** | Web Developer |
+| **Amelya Leonova** | Pitch & Presentation Lead |
+| **Arlan Sharipov** | Pitch Co-author |

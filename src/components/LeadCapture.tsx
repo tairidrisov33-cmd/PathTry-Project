@@ -18,19 +18,19 @@ export default function LeadCapture({ language, type, profession, professionTitl
   const t = ru ? {
     kicker: partner ? 'Для вузов и EdTech' : 'Персональная дорожная карта',
     title: partner ? 'Станьте партнёром PathTry' : `Хочешь дорожную карту по профессии «${professionTitle}»?`,
-    text: partner ? 'Оставьте контакт — пришлём демо аналитики и условия пилота.' : 'Пришлём план на 3 месяца: вузы и программы, онлайн-курсы, проекты для портфолио и людей, с которыми стоит поговорить.',
+    text: partner ? 'Оставьте контакт — пришлём демо аналитики и условия пилота.' : 'Мы собираем персональные дорожные карты: вузы и программы, онлайн-курсы, проекты для портфолио. Оставь контакт — пришлём твою, как только она будет готова.',
     bullets: partner ? [] : ['Подборка вузов и курсов', 'Проекты для портфолио', 'План на 12 недель'],
-    placeholder: 'Email или @username в Telegram', org: 'Вуз или компания', send: partner ? 'Запросить демо' : 'Получить дорожную карту', sending: 'Отправляем…',
+    placeholder: 'Email или @username в Telegram', org: 'Вуз или компания', send: partner ? 'Запросить демо' : 'Хочу дорожную карту', sending: 'Отправляем…',
     invalid: 'Введи корректный email или Telegram-ник (например, @pathtry_user).', failed: 'Не получилось отправить. Попробуй ещё раз.',
-    done: partner ? 'Спасибо! Мы свяжемся с вами в течение двух рабочих дней.' : 'Готово! Дорожная карта придёт на', consent: 'Никакого спама — только то, что ты запросил(а). Отписаться можно в любой момент.'
+    done: partner ? 'Спасибо! Мы свяжемся с вами в течение двух рабочих дней.' : 'Ты в списке! Пришлём дорожную карту, как только она будет готова, на', consent: 'Никакого спама — только то, что ты запросил(а). Отписаться можно в любой момент.'
   } : {
     kicker: partner ? 'For universities & EdTech' : 'Personal roadmap',
     title: partner ? 'Become a PathTry partner' : `Want a personal roadmap for ${professionTitle}?`,
-    text: partner ? 'Leave a contact and we will send an analytics demo and pilot terms.' : 'Get a 3-month plan: universities and programmes, online courses, portfolio projects, and people worth talking to.',
+    text: partner ? 'Leave a contact and we will send an analytics demo and pilot terms.' : 'We are building personal roadmaps: universities and programmes, online courses, and portfolio projects. Leave a contact and we will send yours as soon as it is ready.',
     bullets: partner ? [] : ['Universities & courses', 'Portfolio projects', '12-week plan'],
-    placeholder: 'Email or Telegram @username', org: 'University or company', send: partner ? 'Request a demo' : 'Get my roadmap', sending: 'Sending…',
+    placeholder: 'Email or Telegram @username', org: 'University or company', send: partner ? 'Request a demo' : 'Request my roadmap', sending: 'Sending…',
     invalid: 'Enter a valid email or Telegram username (e.g. @pathtry_user).', failed: 'Could not send. Please try again.',
-    done: partner ? 'Thank you! We will get back to you within two business days.' : 'Done! Your roadmap is on its way to', consent: 'No spam — only what you asked for. Unsubscribe any time.'
+    done: partner ? 'Thank you! We will get back to you within two business days.' : 'You are on the list! We will send your roadmap as soon as it is ready to', consent: 'No spam — only what you asked for. Unsubscribe any time.'
   };
 
   const submit = async (event: React.FormEvent) => {

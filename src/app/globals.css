@@ -770,3 +770,8 @@ html.js [data-reveal]:not(.is-in), html.js [data-reveal]:not(.is-in) *, html.js 
 .about-section ol { list-style:decimal; }
 .about-section ul { list-style:disc; }
 .about-section a { color:var(--coral); font-weight:700; }
+.verification-qr svg { display:block; width:76px; height:76px; }
+.verification-qr { line-height:0; }
+.verification-qr svg { display:block; width:76px; height:76px; }
+.verification-qr { line-height:0; }
+@media print { html, html.dark { color-scheme:light !important; background:#fff !important; } }
