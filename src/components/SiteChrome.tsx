@@ -9,6 +9,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
 import AssistantWidget from '@/components/AssistantWidget';
 import Icon from '@/components/Icon';
+import { visitSource } from '@/lib/visitSource';
 
 export const GITHUB_URL = 'https://github.com/tairidrisov33-cmd/PathTry-Project';
 
@@ -40,6 +41,9 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     window.addEventListener('resize', onScroll);
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); cancelAnimationFrame(frame); };
   }, []);
+
+  // Remember ?ref= (a class pilot link, a shared card…) for the rest of the visit.
+  useEffect(() => { visitSource(); }, [pathname]);
 
   // Sections marked data-reveal play their entrance only once they scroll into view.
   useEffect(() => {
@@ -75,7 +79,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     <div className="scroll-progress" ref={progressRef} aria-hidden="true" />
     <div className="header-shell" ref={headerRef}><header className="site-header"><Link className="logo" href="/"><LogoMark />path<span>try</span></Link><div className="header-tools"><span className="header-note">{text.headerNote}</span><LanguageToggle /><ThemeToggle /></div></header></div>
     {children}
-    <footer className="footer"><div className="footer-brand"><span className="logo"><LogoMark />path<span>try</span></span><span>{text.footer}</span><nav className="footer-nav" aria-label={language === 'ru' ? 'Ссылки' : 'Links'}><Link className="footer-link" href="/about"><Icon name="book" size={14} />{language === 'ru' ? 'О проекте' : 'About'}</Link><Link className="footer-link" href="/#partners"><Icon name="building" size={14} />{language === 'ru' ? 'Для вузов и EdTech' : 'For universities & EdTech'}</Link><a className="footer-link" href={GITHUB_URL} target="_blank" rel="noreferrer"><Icon name="code" size={14} />GitHub</a></nav></div><button className="to-top" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><Icon name="arrowUp" size={15} />{language === 'ru' ? 'Наверх' : 'Back to top'}</button></footer>
+    <footer className="footer"><div className="footer-brand"><span className="logo"><LogoMark />path<span>try</span></span><span>{text.footer}</span><nav className="footer-nav" aria-label={language === 'ru' ? 'Ссылки' : 'Links'}><Link className="footer-link" href="/about"><Icon name="book" size={14} />{language === 'ru' ? 'О проекте' : 'About'}</Link><Link className="footer-link" href="/schools"><Icon name="cap" size={14} />{language === 'ru' ? 'Для школ' : 'For schools'}</Link><Link className="footer-link" href="/#partners"><Icon name="building" size={14} />{language === 'ru' ? 'Для вузов и EdTech' : 'For universities & EdTech'}</Link><a className="footer-link" href={GITHUB_URL} target="_blank" rel="noreferrer"><Icon name="code" size={14} />GitHub</a></nav></div><button className="to-top" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><Icon name="arrowUp" size={15} />{language === 'ru' ? 'Наверх' : 'Back to top'}</button></footer>
     <AssistantWidget />
   </>;
 }

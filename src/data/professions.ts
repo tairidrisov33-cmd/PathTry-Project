@@ -32,3 +32,9 @@ export function professionTitle(slug: string, language: Language) {
   const profession = getProfession(slug);
   return profession ? profession.title[language === 'ru' ? 1 : 0] : slug;
 }
+
+// A light index (no task texts) so the result page can score every experiment a student has tried.
+export type ProfessionSummary = Pick<ProfessionDef, 'slug' | 'title' | 'color'> & { tasks: { id: string; type: 'choice' | 'text'; skill: ProfessionDef['tasks'][number]['skill'] }[] };
+export function professionIndex(): ProfessionSummary[] {
+  return professions.map(({ slug, title, color, tasks }) => ({ slug, title, color, tasks: tasks.map(({ id, type, skill }) => ({ id, type, skill })) }));
+}

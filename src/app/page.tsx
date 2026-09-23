@@ -76,6 +76,7 @@ export default function Home() {
     <section className="section partners" id="partners" data-reveal>
       <div className="section-head"><div><div className="kicker">B2B · {ru ? 'Партнёрство' : 'Partnerships'}</div><h2>{ru ? 'Для вузов и EdTech' : 'For universities & EdTech'}</h2></div><span className="muted">{ru ? 'Модель монетизации PathTry' : 'How PathTry makes money'}</span></div>
       <div className="partner-grid">{partnerValue.map((item) => <div className="partner-card" key={item.title}><span className="step-icon"><Icon name={item.icon} size={20} /></span><h3>{item.title}</h3><p>{item.body}</p></div>)}</div>
+      <Link className="schools-link" href="/schools"><Icon name="cap" size={16} />{ru ? 'Для школ: бесплатный урок профориентации на 45 минут, ссылка и QR-код для класса' : 'For schools: a free 45-minute career lesson with a class link and QR code'}<Icon name="arrowRight" size={15} /></Link>
       <LeadCapture language={language} type="partner" />
     </section>
     <section className="method-section" data-reveal><div><div className="kicker">{text.methodKicker}</div><h2>{text.methodTitle}</h2></div><div><p>{text.methodText}</p><p className="method-note"><Icon name="shield" size={15} />{text.methodNote}</p><div className="source-links"><a href="https://www.onetonline.org/" target="_blank" rel="noreferrer">O*NET OnLine <Icon name="arrowUpRight" size={13} /></a><a href="https://esco.ec.europa.eu/" target="_blank" rel="noreferrer">European ESCO <Icon name="arrowUpRight" size={13} /></a></div></div></section>

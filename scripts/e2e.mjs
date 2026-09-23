@@ -94,7 +94,7 @@ for (const slug of slugs) {
 // Site-wide checks: content pages, the floating PathFinder button, and a partly finished result.
 errors.length = 0;
 const site = new Set();
-for (const path of ['/', '/about']) {
+for (const path of ['/', '/about', '/schools']) {
   await send('Page.navigate', { url: `${BASE}${path}` }); await sleep(2500);
   await run(`document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-in'))`); await sleep(300);
   if (lang === 'ru') for (const text of await run(englishScan)) site.add(`${path}: English text: ${text.slice(0, 60)}`);
@@ -117,6 +117,9 @@ if (!partial.score?.startsWith('2')) site.add(`result: 2 pro moves shown as "${p
 if (!partial.notice) site.add('result: no "preliminary result" notice for an unfinished run');
 if (!/Not rated|Не оценено/.test(partial.energy ?? '')) site.add(`result: unrated energy shown as "${partial.energy}"`);
 if (partial.pad < 100) site.add('result: no bottom space for the PathFinder button');
+// After several professions the result page compares them on the profession map.
+const mapped = await run(`document.querySelectorAll('.map-list li').length`);
+if (slugs.length > 1 && mapped < slugs.length) site.add(`result: profession map shows ${mapped} of ${slugs.length} tried professions`);
 errors.forEach((error) => site.add(error));
 console.log(`${site.size ? '✗' : '✓'} ${'site checks'.padEnd(26)}${site.size ? `\n    ${[...site].join('\n    ')}` : ''}`);
 

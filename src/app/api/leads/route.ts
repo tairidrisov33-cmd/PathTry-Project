@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { normalizeContact } from '@/lib/leads';
+import { isVisitSource } from '@/lib/visitSource';
 import { badRequest, isShortString, rateLimit, readJson, tooManyRequests } from '@/lib/security';
 
 // Lead capture for roadmap requests (students) and partnership requests (universities, EdTech).
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
   if (payload.organization !== undefined && !isShortString(payload.organization, 120)) return badRequest();
   if (payload.profession !== undefined && !(isShortString(payload.profession, 60) && /^[a-z-]+$/.test(payload.profession))) return badRequest();
   if (payload.match !== undefined && !(typeof payload.match === 'number' && payload.match >= 0 && payload.match <= 100)) return badRequest();
+  if (payload.ref !== undefined && !isVisitSource(payload.ref)) return badRequest();
   if (payload.consent !== true) return NextResponse.json({ ok: false, error: 'consent' }, { status: 422 });
   const contact = normalizeContact(payload.contact);
   if (!contact) return NextResponse.json({ ok: false, error: 'contact' }, { status: 422 });
@@ -30,6 +32,7 @@ export async function POST(request: Request) {
     match: typeof payload.match === 'number' ? Math.round(payload.match) : undefined,
     organization: typeof payload.organization === 'string' && payload.organization.trim() ? payload.organization.trim() : undefined,
     language: payload.language === 'ru' ? 'ru' : 'en',
+    source: payload.ref as string | undefined,
     createdAt: new Date().toISOString()
   };
 

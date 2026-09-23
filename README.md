@@ -1,5 +1,7 @@
 # PathTry — try a profession before you choose it
 
+[![CI](https://github.com/tairidrisov33-cmd/PathTry-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/tairidrisov33-cmd/PathTry-Project/actions/workflows/ci.yml)
+
 **Live demo:** https://pathtry.site · VentureHack 2026, Track 2 (EduTech)
 
 PathTry is a micro career-exploration service for school students. In about ten minutes a student works through ten realistic tasks from a profession, gets feedback from an AI mentor, and sees whether the work actually fits them — before committing years to a university major. The site is fully bilingual (English and Russian).
@@ -35,6 +37,8 @@ Short, low-stakes work simulations — not a test, a trial of real work. Each pr
 - **PathFinder AI mentor** — reviews written answers generously (it is a taster, not an exam), gives hints without spoilers, shows an expert sample answer, answers career questions with the current task in context, and writes a personal 3–4 sentence breakdown of the result.
 - **Interest & energy meter** — students rate each task (energising / neutral / draining); the result shows energy "based on N of 10 tasks", or "Not rated".
 - **Result dashboard** — pro moves, match %, verdict, skill radar, strengths, subjects, majors, next steps, a related profession, share link, result card with QR code, Save as PDF, and a one-tap "Did this change how you see this profession?" question. Unfinished runs are clearly marked as preliminary.
+- **Profession map** — every profession a student has tried, compared side by side by match and energy, with the best fit highlighted.
+- **For schools** — a [45-minute lesson plan](https://pathtry.site/schools), a class link and QR code generator, and `?ref=` tagging so a class pilot can be measured in analytics and lead emails.
 - **Lead capture** — personal roadmap request (email or Telegram) and a partner form for universities and EdTech, delivered by email (Resend) and/or webhook.
 - **Bilingual and mobile-first** — server-rendered in the visitor's language (`?lang=`, cookie, or browser language), no flash of the other language; tested at 360–1440 px.
 - **Privacy by design** — no sign-up; progress stays in the browser.
@@ -84,6 +88,8 @@ Next.js 15 (App Router, middleware, metadata routes, `next/og`) · React 19 · T
 - **Lead forms**: server-side email/Telegram validation, max lengths, a required consent checkbox (enforced on the server), a honeypot field, and clear success/error states; contact details are never written to logs.
 - **Safe errors**: responses are generic; stack traces and provider errors are only written to server logs.
 - **AI safety**: PathFinder's system prompt restricts it to careers and studying, refuses harmful or off-topic requests, answers crises with a referral to trusted adults and helplines, and never presents medical, legal, or financial information as real advice. Student text is treated as data, not instructions, and task options are never sent to the model before the student answers.
+- **Responsible disclosure**: [SECURITY.md](SECURITY.md) and [/.well-known/security.txt](https://pathtry.site/.well-known/security.txt).
+- **Continuous integration**: GitHub Actions runs lint, type-check, unit tests and a production build on every push.
 - **No accounts and no database**: progress and results stay in the browser's localStorage.
 
 ## SEO & sharing
@@ -130,7 +136,7 @@ Open http://localhost:3000. Production build: `npm run build && npm start`.
 
 ```bash
 npm run lint       # ESLint (Next.js core-web-vitals + TypeScript rules)
-npm test           # Vitest unit tests: scoring (all-correct, none-correct, unfinished, mixed with written answers, tampered storage) and answer grading
+npm test           # Vitest unit tests: scoring (all-correct, none-correct, unfinished, mixed with written answers, tampered storage), answer grading and class links
 npm run test:e2e   # plays all 15 professions in headless Chrome (a dev or production server must be running)
 ```
 
@@ -159,6 +165,10 @@ Set them in `.env.local` locally or under the Vercel project's Environment Varia
 
 Free for students. Universities, schools, and EdTech companies pay for anonymous interest analytics, branded experiments built around their programmes, and pilots.
 
+**Go-to-market:** (1) free school pilots with career counsellors, measured with class links and a before/after survey; (2) students share result cards with QR codes, bringing friends without ad spend; (3) universities and EdTech become paying partners.
+
+**Running costs:** today PathTry runs on free tiers (Vercel hosting, Groq for the AI mentor, Resend for email); the only cost is the domain. Switching to Claude Haiku costs a fraction of a cent per answer review, and the offline mode keeps the site working without any AI provider.
+
 ## Data sources
 
 - [O*NET OnLine](https://www.onetonline.org/) — US Department of Labor occupational database (work activities, skills).
@@ -169,7 +179,7 @@ Tasks are simplified, rewritten scenarios for students. PathTry is an exploratio
 ## Project structure
 
 ```
-src/app/            pages (home, /try/[slug], /result/[slug], /about), API routes, robots, sitemap, manifest, OG images
+src/app/            pages (home, /try/[slug], /result/[slug], /about, /schools), API routes, robots, sitemap, manifest, OG images
 src/components/     UI components (TaskRunner, ResultClient, PathFinder chat, LeadCapture, evidence sections…)
 src/data/           bilingual profession catalogue, translations, validation results
 src/lib/            scoring, PathFinder (Claude + Groq + offline), grader, security, SEO helpers

@@ -7,5 +7,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}${path}`, changeFrequency: 'weekly', priority,
     alternates: { languages: { en: `${SITE_URL}${path}?lang=en`, ru: `${SITE_URL}${path}?lang=ru` } }
   });
-  return [entry('/', 1), entry('/about', 0.6), ...professions.map((profession) => entry(`/try/${profession.slug}`, 0.8))];
+  return [entry('/', 1), entry('/about', 0.6), entry('/schools', 0.7), ...professions.map((profession) => entry(`/try/${profession.slug}`, 0.8))];
 }

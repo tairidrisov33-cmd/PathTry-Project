@@ -8,6 +8,7 @@ import { gradeOffline, type Review, type Verdict } from '@/lib/grader';
 import { energyLevel, scoreExperiment, type EnjoymentKey, type SavedAnswer } from '@/lib/scoring';
 import { askPathfinder, setTaskContext } from '@/lib/taskContext';
 import { track } from '@vercel/analytics';
+import { visitSource } from '@/lib/visitSource';
 import Icon, { type IconName } from '@/components/Icon';
 
 const letters = ['A', 'B', 'C', 'D', 'E'];
@@ -60,7 +61,7 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
 
   const submitAnswer = useCallback(async () => {
     if (!hasAnswer || submitted) return;
-    if (step === 0 && answers.length === 0) track('experiment_started', { profession: definition.slug, language });
+    if (step === 0 && answers.length === 0) track('experiment_started', { profession: definition.slug, language, ref: visitSource() ?? 'direct' });
     setSubmitted(true);
     setShowHint(false);
     setVariant((current) => current + 1 + Math.floor(Math.random() * 3));
@@ -85,7 +86,7 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
     localStorage.setItem(key, JSON.stringify({ answers: nextAnswers }));
     if (isLast) {
       setLeaving(true);
-      track('experiment_completed', { profession: definition.slug, score: scoreExperiment(nextAnswers, profession.tasks).proMoves, total, language });
+      track('experiment_completed', { profession: definition.slug, score: scoreExperiment(nextAnswers, profession.tasks).proMoves, total, language, ref: visitSource() ?? 'direct' });
       sessionStorage.setItem('pathtry-celebrate', definition.slug);
       document.body.classList.add('page-exit');
       window.setTimeout(() => { window.location.href = `/result/${definition.slug}`; }, 260);

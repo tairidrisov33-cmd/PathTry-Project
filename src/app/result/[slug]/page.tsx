@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getProfession, relatedProfession } from '@/data/professions';
+import { getProfession, professionIndex, relatedProfession } from '@/data/professions';
 import { serverLanguage } from '@/lib/serverLanguage';
 import ResultClient from '@/components/ResultClient';
 
@@ -19,5 +19,5 @@ export default async function ResultPage({ params }: Params) {
   const { slug } = await params;
   const definition = getProfession(slug);
   if (!definition) notFound();
-  return <main className="result-shell"><ResultClient definition={definition} alternative={relatedProfession(slug)} /></main>;
+  return <main className="result-shell"><ResultClient definition={definition} alternative={relatedProfession(slug)} catalog={professionIndex()} /></main>;
 }

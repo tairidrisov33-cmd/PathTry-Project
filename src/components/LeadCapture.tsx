@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Language } from '@/data/translations';
 import { normalizeContact } from '@/lib/leads';
+import { visitSource } from '@/lib/visitSource';
 import Icon from '@/components/Icon';
 
 type Props = { language: Language; type: 'roadmap' | 'partner'; profession?: string; professionTitle?: string; match?: number };
@@ -41,7 +42,7 @@ export default function LeadCapture({ language, type, profession, professionTitl
     if (!consent) { setError(t.consentMissing); return; }
     setError(''); setStatus('sending');
     try {
-      const response = await fetch('/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, contact: normalized.value, profession, match, organization: organization.trim() || undefined, language, website, consent }) });
+      const response = await fetch('/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, contact: normalized.value, profession, match, organization: organization.trim() || undefined, language, website, consent, ref: visitSource() }) });
       if (response.status === 429) { setStatus('error'); setError(t.tooMany); return; }
       if (!response.ok) throw new Error('lead failed');
       setContact(normalized.value);

@@ -1,0 +1,5 @@
+Contact: mailto:pathtry.site@gmail.com
+Expires: 2027-09-30T00:00:00.000Z
+Preferred-Languages: en, ru
+Canonical: https://pathtry.site/.well-known/security.txt
+Policy: https://github.com/tairidrisov33-cmd/PathTry-Project/blob/main/SECURITY.md

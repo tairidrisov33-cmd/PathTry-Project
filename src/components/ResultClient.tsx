@@ -13,6 +13,8 @@ import { describeResult, scoreExperiment, SKILL_LABELS, type SavedAnswer } from 
 import Icon, { professionColors, professionIcons, type IconName } from '@/components/Icon';
 import CountUp from '@/components/CountUp';
 import Confetti from '@/components/Confetti';
+import ProfessionMap from '@/components/ProfessionMap';
+import type { ProfessionSummary } from '@/data/professions';
 
 const enjoymentIcons: Record<string, IconName> = { yes: 'smile', 'so-so': 'meh', no: 'frown' };
 const skillIcons: Record<Skill, IconName> = { solve: 'puzzle', people: 'heart', analyze: 'chart', create: 'bulb', pressure: 'shield' };
@@ -21,7 +23,7 @@ const BREAKDOWN_TIMEOUT_MS = 10_000;
 
 type Breakdown = { text: string; source: 'ai' | 'rules' };
 
-export default function ResultClient({ definition, alternative }: { definition: ProfessionDef; alternative: ProfessionDef }) {
+export default function ResultClient({ definition, alternative, catalog }: { definition: ProfessionDef; alternative: ProfessionDef; catalog: ProfessionSummary[] }) {
   const { language } = useLanguage();
   const text = ui[language];
   const ru = language === 'ru';
@@ -147,6 +149,7 @@ export default function ResultClient({ definition, alternative }: { definition: 
         {breakdown ? <div className="ai-text" aria-live="polite"><p>{breakdown.text}</p><small>{breakdown.source === 'ai' ? (ru ? 'Написано PathFinder AI' : 'Written by PathFinder AI') : (ru ? 'PathFinder · по правилам оценки' : 'PathFinder · rule-based summary')}</small></div> : <div className="ai-thinking" role="status"><span /> <span /> <span /> <em>{ru ? 'Собираем сигналы из ответов' : 'Reading signals from your answers'}</em></div>}
         <div className="ai-stat"><span><Icon name={strongest.icon} size={14} />{ru ? 'Сильные стороны' : 'Strengths'}</span><strong>{`${SKILL_LABELS[topSkill][lang]}, ${SKILL_LABELS[secondSkill][lang].toLowerCase()}.`}</strong></div><div className="ai-match"><strong>{ready ? <CountUp value={match} suffix="%" /> : '—'}</strong><span>{ru ? 'совпадение с рабочим стилем' : 'work style match'}</span></div><div className="match-bar"><span style={{ width: `${match}%` }} /></div><p className="ai-alternative"><Icon name="route" size={14} />{ru ? 'Похожее направление, которое стоит попробовать: ' : 'A related path worth trying: '}<TransitionLink href={`/try/${alternative.slug}`}>{alternative.title[lang]} <Icon name="arrowUpRight" size={13} /></TransitionLink></p></div>
     </section>
+    <ProfessionMap index={catalog} current={definition.slug} alternative={catalog.find((item) => item.slug === alternative.slug) ?? catalog[0]} language={language} />
     <ViewFeedback slug={definition.slug} language={language} />
     <LeadCapture language={language} type="roadmap" profession={definition.slug} professionTitle={profession.title} match={match} />
     {answers.length > 0 && <section className="recap"><div className="recap-head"><h2><Icon name="flag" size={20} />{text.recap}</h2><span className="muted">{text.recapText}</span></div><ol className="recap-list">{recap.map((item, index) => <li className={item.state} key={item.id} style={{ animationDelay: `${index * 50}ms` }}><span className="recap-num">{item.answered ? <Icon name={item.state === 'is-good' ? 'check' : item.state === 'is-partial' ? 'route' : 'x'} size={13} strokeWidth={3} /> : index + 1}</span><span className="recap-prompt">{item.prompt}</span>{item.outcome && <span className="recap-outcome">{item.outcome}</span>}<span className={`recap-feel ${item.feeling === null ? 'none' : ''}`} title={item.feeling === null ? text.skipped : undefined}>{item.feeling === null ? '—' : <Icon name={enjoymentIcons[item.feeling]} size={17} />}</span></li>)}</ol></section>}
