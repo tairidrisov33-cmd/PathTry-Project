@@ -28,7 +28,7 @@ const slugs = process.env.SLUGS ? process.env.SLUGS.split(',') : readdirSync(cat
 const port = 9300 + Math.floor(Math.random() * 400);
 const chrome = spawn(chromePath, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), 'pathtry-e2e-'))}`, 'about:blank'], { stdio: 'ignore' });
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-let targets; for (let i = 0; i < 50 && !targets; i++) { try { targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json(); } catch { await sleep(200); } }
+let targets; for (let i = 0; i < 150 && !targets; i++) { try { targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json(); } catch { await sleep(200); } }
 const ws = new WebSocket(targets.find((target) => target.type === 'page').webSocketDebuggerUrl);
 await new Promise((resolve) => ws.addEventListener('open', resolve));
 
@@ -37,12 +37,16 @@ ws.addEventListener('message', (event) => {
   const message = JSON.parse(event.data);
   if (pending.has(message.id)) { pending.get(message.id)(message.result); pending.delete(message.id); }
   if (message.method === 'Runtime.exceptionThrown') errors.push(`exception: ${(message.params.exceptionDetails.exception?.description || message.params.exceptionDetails.text).slice(0, 160)}`);
+  // Browser-level messages such as Content-Security-Policy violations arrive through the Log domain
+  // (Vercel Analytics' script only exists on Vercel, so its local 404 is ignored).
+  if (message.method === 'Log.entryAdded' && message.params.entry.level === 'error' && !/favicon|Failed to load resource|_vercel\/insights/.test(message.params.entry.text)) errors.push(`log: ${message.params.entry.text.slice(0, 160)}`);
   if (message.method === 'Runtime.consoleAPICalled' && message.params.type === 'error') errors.push(`console.error: ${message.params.args.map((arg) => arg.value ?? arg.description ?? '').join(' ').slice(0, 160)}`);
 });
 const send = (method, params = {}) => new Promise((resolve) => { const callId = ++id; pending.set(callId, resolve); ws.send(JSON.stringify({ id: callId, method, params })); });
 const run = async (expression) => (await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })).result?.value;
 
 await send('Runtime.enable');
+await send('Log.enable');
 await send('Emulation.setDeviceMetricsOverride', { width, height: 850, deviceScaleFactor: 1, mobile: width < 600 });
 await send('Page.navigate', { url: `${BASE}/` }); await sleep(2500);
 await run(`document.cookie = 'pathtry-language=${lang}; path=/'; localStorage.clear(); localStorage.setItem('pathtry-language', '${lang}')`);
@@ -50,7 +54,7 @@ await run(`document.cookie = 'pathtry-language=${lang}; path=/'; localStorage.cl
 const answer = lang === 'ru'
   ? 'Сначала я бы выяснил, что именно произошло и кому это важно, потому что без фактов решение будет случайным. Затем проверил бы один конкретный шаг.'
   : 'First I would find out exactly what happened and who it affects, because without facts the decision is random. Then I would test one concrete step.';
-const englishScan = `(() => { const found = []; const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let node; while ((node = walk.nextNode())) { const el = node.parentElement; if (!el || el.closest('script,style,svg,[aria-hidden=true]')) continue; const text = node.textContent.trim(); if (text && /[A-Za-z]{3,}/.test(text) && !/[А-Яа-яЁё]/.test(text) && !/^(PathTry|PathFinder|pathtry|path|try|O\\*NET.*|ESCO|AI|EN|RU|IELTS.*|SAT.*|IB.*|A-Levels.*|MCAT.*|LSAT.*|GRE.*|NCLEX.*|UX.*|CompTIA.*|Enter|Ctrl.*|Model United Nations|Godot|Unity|CTF|PATHFINDER.*|GitHub)$/.test(text)) found.push(text); } return found; })()`;
+const englishScan = `(() => { const found = []; const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let node; while ((node = walk.nextNode())) { const el = node.parentElement; if (!el || el.closest('script,style,svg,[aria-hidden=true]')) continue; const text = node.textContent.trim(); if (text && /[A-Za-z]{3,}/.test(text) && !/[А-Яа-яЁё]/.test(text) && !/^(PathTry|PathFinder|pathtry|path|try|O\\*NET.*|ESCO|AI|EN|RU|IELTS.*|SAT.*|IB.*|A-Levels.*|MCAT.*|LSAT.*|GRE.*|NCLEX.*|UX.*|CompTIA.*|Enter|Ctrl.*|Model United Nations|Godot|Unity|CTF|PATHFINDER.*|GitHub|Tengrinews.*|WEF.*|European ESCO|Tair Idrissov|Damir Omar|Amelya Leonova|Arlan Sharipov)$/.test(text)) found.push(text); } return found; })()`;
 
 let failed = 0;
 for (const slug of slugs) {
@@ -87,6 +91,35 @@ for (const slug of slugs) {
   console.log(`${issues.size ? '✗' : '✓'} ${slug.padEnd(26)} score ${result.score ?? '-'}${issues.size ? `\n    ${[...issues].join('\n    ')}` : ''}`);
 }
 
+// Site-wide checks: content pages, the floating PathFinder button, and a partly finished result.
+errors.length = 0;
+const site = new Set();
+for (const path of ['/', '/about']) {
+  await send('Page.navigate', { url: `${BASE}${path}` }); await sleep(2500);
+  await run(`document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-in'))`); await sleep(300);
+  if (lang === 'ru') for (const text of await run(englishScan)) site.add(`${path}: English text: ${text.slice(0, 60)}`);
+  if ((await run(`document.documentElement.scrollWidth - innerWidth`)) > 0) site.add(`${path}: horizontal overflow`);
+  const small = await run(`[...document.querySelectorAll('.language-toggle button, .footer-link, .explore-link')].filter((el) => el.offsetParent && el.getBoundingClientRect().height < 40).map((el) => el.textContent.trim())`);
+  if (width < 600 && small.length) site.add(`${path}: tap targets under 40px: ${small.join(', ')}`);
+}
+if (!(await run(`Boolean(document.querySelector('.impact-card')) || location.pathname !== '/'`))) site.add('home: "Why it matters" section missing');
+
+// Two pro moves in an unfinished run must show as 2, never 0, and the AI breakdown must finish.
+const partialSlug = slugs.at(-1);
+await run(`(() => { const key = 'pathtry-v2-${partialSlug}'; const data = JSON.parse(localStorage.getItem(key) || '{"answers":[]}'); data.answers = data.answers.slice(0, 2).map((answer) => ({ ...answer, score: 1, enjoyment: 'skipped' })); localStorage.setItem(key, JSON.stringify(data)); })()`);
+await send('Page.navigate', { url: `${BASE}/result/${partialSlug}` });
+let breakdown = false;
+for (let tick = 0; tick < 48 && !breakdown; tick++) { await sleep(250); breakdown = await run(`Boolean(document.querySelector('.ai-text p')?.textContent.trim())`); }
+if (!breakdown) site.add('result: PathFinder breakdown still loading after 12 s');
+await sleep(1500);
+const partial = (await run(`({ score: document.querySelector('.score')?.textContent, notice: Boolean(document.querySelector('.partial-notice')), energy: document.querySelector('.summary-strip > div:nth-child(3) strong')?.textContent, pad: parseFloat(getComputedStyle(document.querySelector('.result-shell')).paddingBottom) })`)) ?? {};
+if (!partial.score?.startsWith('2')) site.add(`result: 2 pro moves shown as "${partial.score}"`);
+if (!partial.notice) site.add('result: no "preliminary result" notice for an unfinished run');
+if (!/Not rated|Не оценено/.test(partial.energy ?? '')) site.add(`result: unrated energy shown as "${partial.energy}"`);
+if (partial.pad < 100) site.add('result: no bottom space for the PathFinder button');
+errors.forEach((error) => site.add(error));
+console.log(`${site.size ? '✗' : '✓'} ${'site checks'.padEnd(26)}${site.size ? `\n    ${[...site].join('\n    ')}` : ''}`);
+
 ws.close(); chrome.kill();
 console.log(`\n${slugs.length - failed}/${slugs.length} professions passed (${lang}, ${width}px, ${BASE})`);
-process.exit(failed ? 1 : 0);
+process.exit(failed || site.size ? 1 : 0);
