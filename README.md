@@ -174,6 +174,11 @@ Free for students. Universities, schools, and EdTech companies pay for anonymous
 - [O*NET OnLine](https://www.onetonline.org/) — US Department of Labor occupational database (work activities, skills).
 - [ESCO](https://esco.ec.europa.eu/) — European Skills, Competences, Qualifications and Occupations taxonomy.
 
+**Research behind the approach** (it supports the idea of trying work early; it is not the source of the tasks):
+
+- [OECD Career Readiness project](https://oecdedutoday.com/preparing-youth-for-work-what-works-career-guidance/) — teenagers who explore and experience work (workplace visits, job shadowing, conversations with professionals) tend to have lower unemployment, higher wages and greater job satisfaction as adults.
+- [Harvard Graduate School of Education — *Pathways to Prosperity* (Symonds, Schwartz & Ferguson, 2011)](https://dash.harvard.edu/entities/publication/73120378-9570-6bd4-e053-0100007fdf3b) — calls for career pathways and guidance that connect school to real work, beyond classroom-based academics.
+
 Tasks are simplified, rewritten scenarios for students. PathTry is an exploration tool, not a psychological test or a prediction of career success.
 
 ## Project structure

@@ -898,3 +898,9 @@ main { overflow-x:clip; }
 .schools-link:hover { border-color:var(--coral); color:var(--coral); }
 .gtm p { margin:0; color:var(--muted); font-size:14px; line-height:1.55; }
 .schools-shell .partner-grid { grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); }
+.research-list { display:grid; gap:10px; margin:12px 0 0; padding:0 !important; list-style:none !important; }
+.about-section .research-list li + li { margin-top:0; }
+.research-list li { display:grid; gap:4px; padding:14px 16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }
+.research-list a { display:inline-flex; align-items:center; gap:4px; color:var(--ink); }
+.research-list a:hover { color:var(--coral); }
+.research-list span { color:var(--muted); font-size:14px; line-height:1.55; }
