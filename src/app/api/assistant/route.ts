@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { Language } from '@/data/translations';
-import { chatWithClaude } from '@/lib/pathfinder';
+import { chatWithAI } from '@/lib/pathfinder';
 import { offlineReply } from '@/lib/pathfinderOffline';
 import { badRequest, isShortString, MAX_HISTORY, MAX_MESSAGE_LENGTH, rateLimit, readJson, tooManyRequests } from '@/lib/security';
 import type { TaskContext } from '@/lib/taskContext';
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
   const task = parseTask(payload.task);
   try {
-    const answer = await chatWithClaude(history, language, page, task);
+    const answer = await chatWithAI(history, language, page, task);
     if (answer) return NextResponse.json({ answer, source: 'ai' });
   } catch (error) {
     console.error('PathFinder chat failed, using offline mode', error instanceof Error ? error.message : 'unknown error');

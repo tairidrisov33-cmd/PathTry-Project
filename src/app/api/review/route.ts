@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getProfession, localize } from '@/data/professions';
 import { gradeOffline } from '@/lib/grader';
-import { gradeWithClaude } from '@/lib/pathfinder';
+import { gradeWithAI } from '@/lib/pathfinder';
 import { badRequest, isShortString, MAX_MESSAGE_LENGTH, rateLimit, readJson, tooManyRequests } from '@/lib/security';
 
 export async function POST(request: Request) {
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   if (offline.verdict === 'empty') return NextResponse.json(offline);
 
   try {
-    const review = await gradeWithClaude(payload.answer, { ...gradable, sample: task.sample ?? '', profession: profession.title }, language);
+    const review = await gradeWithAI(payload.answer, { ...gradable, sample: task.sample ?? '', profession: profession.title }, language);
     if (review) return NextResponse.json(review);
   } catch (error) {
     console.error('PathFinder review failed, using rubric', error instanceof Error ? error.message : 'unknown error');

@@ -41,6 +41,7 @@ flowchart LR
     B -->|fetch JSON| A[API routes<br/>/api/review · /api/assistant · /api/leads]
     A -->|validate · rate-limit| A
     A -->|ANTHROPIC_API_KEY, server only| C[Claude Haiku 4.5<br/>Anthropic API]
+    A -->|GROQ_API_KEY, free tier| G[Open model via Groq<br/>OpenAI-compatible API]
     A -->|no key or error| R[Offline PathFinder<br/>rubric grader + catalog answers]
     A -->|optional LEADS_WEBHOOK_URL| W[Lead webhook<br/>Make / Zapier / Sheets / Telegram]
     B -->|anonymous events| V[Vercel Analytics]
@@ -48,7 +49,7 @@ flowchart LR
 
 - **Content** lives in typed local files (`src/data/catalog/*.ts`), each string stored as an `[English, Russian]` pair. The server loads the catalogue; client pages receive only the one profession they show.
 - **Grading criteria and reference answers** are read on the server from the catalogue, never trusted from the client.
-- **PathFinder** calls Claude through the official Anthropic SDK with structured JSON output for grading. Without a key it falls back to a rubric grader and a catalogue-based answer engine, so the app always works.
+- **PathFinder** tries providers in order: Claude (official Anthropic SDK, structured JSON output), then a free open model through Groq's OpenAI-compatible API (JSON mode, validated with Zod), then an offline rubric grader and catalogue-based answer engine — so the app always works.
 
 ## Tech stack
 
@@ -56,7 +57,7 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS 4 + custom CSS
 
 ## Security measures
 
-- AI keys live only in server-side environment variables (`ANTHROPIC_API_KEY`); no key or provider call ever reaches client code.
+- AI keys live only in server-side environment variables (`ANTHROPIC_API_KEY`, `GROQ_API_KEY`); no key or provider call ever reaches client code.
 - Every API route validates input types and lengths, rejects messages over 1,000 characters, keeps at most 10 chat messages of history, and caps request bodies at 20 KB.
 - In-memory rate limiting per IP: 20 requests/min for PathFinder and grading, 5/min for lead forms.
 - Error responses are generic; stack traces and provider errors are only written to server logs.
@@ -66,7 +67,7 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS 4 + custom CSS
 
 ## AI tools used
 
-- **In the product:** Claude Haiku 4.5 (Anthropic) powers PathFinder's answer reviews and chat.
+- **In the product:** PathFinder's reviews and chat run on Claude Haiku 4.5 (Anthropic) or, on the free setup, an open model served by Groq.
 - **In development:** Claude Code (Anthropic) was used as a coding assistant for implementation, content drafting (bilingual tasks), testing, and documentation. All content and code were reviewed by the team.
 
 ## Run locally
@@ -84,8 +85,12 @@ Open http://localhost:3000. Production build: `npm run build && npm start`.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | No | Enables PathFinder AI (Claude Haiku 4.5). Without it, answers are graded against task criteria and the chat answers from the catalogue. |
+| `ANTHROPIC_API_KEY` | No | PathFinder on Claude Haiku 4.5 (paid, used first when set). |
+| `GROQ_API_KEY` | No | Free alternative: PathFinder on an open model via Groq's free tier (no card needed, key at console.groq.com). Several models are tried automatically; set `FREE_AI_MODEL` to pick one. |
+| `FREE_AI_API_KEY`, `FREE_AI_BASE_URL`, `FREE_AI_MODEL` | No | Any other OpenAI-compatible provider instead of Groq (e.g. Gemini: `https://generativelanguage.googleapis.com/v1beta/openai`, model `gemini-2.5-flash`). |
 | `LEADS_WEBHOOK_URL` | No | Roadmap and partner requests are POSTed here as JSON (Make, Zapier, Google Apps Script, a Telegram bot…). Without it, only anonymous lead metadata is logged. |
+
+With no AI key at all, PathFinder still works: answers are graded against task criteria and the chat answers from the catalogue.
 
 Set them in `.env.local` locally or under the Vercel project's Environment Variables, then redeploy. Enable Web Analytics in the Vercel dashboard to see page views and the custom events `experiment_started`, `experiment_completed`, and `feedback_answer`.
 
