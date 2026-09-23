@@ -50,16 +50,29 @@ export function Comparison({ language }: { language: Language }) {
 export function ValidationSection({ language }: { language: Language }) {
   const ru = language === 'ru';
   if (!(validation.testers > 0)) return null;
+  const lang = ru ? 1 : 0;
   const format = (value: number) => value.toLocaleString(ru ? 'ru-RU' : 'en-GB', { maximumFractionDigits: 1 });
+  const scale = validation.understandingScale;
   const cards: { value: string; label: string }[] = [];
-  if (validation.understandingBefore !== null && validation.understandingAfter !== null) cards.push({ value: `${format(validation.understandingBefore)} → ${format(validation.understandingAfter)}`, label: ru ? 'понимание профессии до и после (из 10)' : 'understanding of the profession, before → after (out of 10)' });
-  if (validation.learnedNewPercent !== null) cards.push({ value: `${format(validation.learnedNewPercent)}%`, label: ru ? 'узнали о профессии что-то новое' : 'learned something new about the profession' });
-  if (validation.notForMePercent !== null) cards.push({ value: `${format(validation.notForMePercent)}%`, label: ru ? 'поняли, что профессия им не подходит, — до поступления' : 'realised a profession is not for them — before applying' });
-  if (validation.realismScore !== null) cards.push({ value: `${format(validation.realismScore)}/5`, label: ru ? 'реалистичность задач' : 'task realism' });
-  if (validation.usabilityScore !== null) cards.push({ value: `${format(validation.usabilityScore)}/5`, label: ru ? 'удобство сайта' : 'ease of use' });
+  if (validation.understandingBefore !== null && validation.understandingAfter !== null) cards.push({ value: `${validation.understandingBefore.toFixed(1)} → ${validation.understandingAfter.toFixed(1)}`.replace(/\./g, ru ? ',' : '.'), label: ru ? `понимание, чем специалист занимается каждый день, до и после (из ${scale})` : `understanding of the day-to-day work, before → after (out of ${scale})` });
+  if (validation.learnedNewPercent !== null) cards.push({ value: `${format(validation.learnedNewPercent)}%`, label: ru ? 'узнали что-то новое о реальной работе' : 'learned something new about the real work' });
+  if (validation.moreInterestedPercent !== null) cards.push({ value: `${format(validation.moreInterestedPercent)}%`, label: ru ? 'профессия стала интереснее' : 'found the profession more interesting' });
+  if (validation.recommendPercent !== null) cards.push({ value: `${format(validation.recommendPercent)}%`, label: ru ? 'порекомендуют другу, который выбирает профессию' : 'would recommend it to a friend choosing a career' });
+  if (validation.notForMePercent !== null) cards.push({ value: `${format(validation.notForMePercent)}%`, label: ru ? 'поняли, что профессия, скорее всего, не их, — ещё до поступления' : 'realised the profession is probably not for them — before applying' });
+  if (validation.realismScore !== null) cards.push({ value: `${format(validation.realismScore)}/5`, label: ru ? 'насколько задания похожи на настоящую работу' : 'how close the tasks feel to real work' });
+  if (validation.usabilityScore !== null) cards.push({ value: `${format(validation.usabilityScore)}/5`, label: ru ? 'удобство и понятность сайта' : 'ease of use' });
+  if (validation.pathfinderScore !== null) cards.push({ value: `${format(validation.pathfinderScore)}/5`, label: ru ? 'полезность PathFinder у тех, кто им пользовался' : 'PathFinder usefulness among those who used it' });
+  const others = validation.testers - validation.schoolStudents;
+  const intro = ru
+    ? `Пилотный опрос: ${validation.testers} участников${others > 0 ? `, из них ${validation.schoolStudents} школьников` : ''}. Каждый прошёл одну профессию и ответил на вопросы до и после.`
+    : `Pilot survey: ${validation.testers} participants${others > 0 ? `, ${validation.schoolStudents} of them school students` : ''}. Each tried one profession and answered questions before and after.`;
   return <section className="section validation" data-reveal aria-labelledby="validation-title">
-    <div className="section-head"><div><div className="kicker">{ru ? 'Проверка' : 'Validation'}</div><h2 id="validation-title">{ru ? 'Проверено на реальных школьниках' : 'Tested with real students'}</h2></div><span className="muted">{ru ? `${validation.testers} участников прошли PathTry и ответили на опрос.` : `${validation.testers} students tried PathTry and answered our survey.`}</span></div>
-    {cards.length > 0 && <div className="impact-grid">{cards.map((card) => <article className="impact-card" key={card.label}><strong>{card.value}</strong><p>{card.label}</p></article>)}</div>}
-    {validation.quotes.length > 0 && <div className="quote-grid">{validation.quotes.map((quote) => <figure className="quote-card" key={quote.text}><blockquote>“{quote.translation && !(ru ? /[А-Яа-яЁё]/ : /[A-Za-z]/).test(quote.text) ? quote.translation : quote.text}”</blockquote><figcaption>— {quote.author}</figcaption></figure>)}</div>}
+    <div className="section-head"><div><div className="kicker">{ru ? 'Проверка' : 'Validation'}</div><h2 id="validation-title">{ru ? 'Проверено на реальных школьниках' : 'Tested with real students'}</h2></div><span className="muted">{intro}</span></div>
+    {cards.length > 0 && <div className="impact-grid validation-grid">{cards.map((card) => <article className="impact-card" key={card.label}><strong>{card.value}</strong><p>{card.label}</p></article>)}</div>}
+    {(validation.liked.length > 0 || validation.improving.length > 0) && <div className="business-model feedback-summary">
+      {validation.liked.length > 0 && <div><strong>{ru ? 'Что отметили участники' : 'What participants liked'}</strong><ul>{validation.liked.map((item) => <li key={item[0]}>{item[lang]}</li>)}</ul></div>}
+      {validation.improving.length > 0 && <div><strong>{ru ? 'Что мы улучшаем по отзывам' : 'What we are improving from feedback'}</strong><ul>{validation.improving.map((item) => <li key={item[0]}>{item[lang]}</li>)}</ul></div>}
+    </div>}
+    {validation.quotes.length > 0 && <div className="quote-grid">{validation.quotes.map((quote) => <figure className="quote-card" key={quote.text}><blockquote>“{quote.translation && !(ru ? /[А-Яа-яЁё]/ : /[A-Za-z]/).test(quote.text) ? quote.translation : quote.text}”</blockquote><figcaption>— {quote.author[lang]}</figcaption></figure>)}</div>}
   </section>;
 }

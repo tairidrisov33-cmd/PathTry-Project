@@ -95,7 +95,20 @@ Next.js 15 (App Router, middleware, metadata routes, `next/og`) · React 19 · T
 
 ## Validation
 
-`src/data/validation.ts` holds the results of testing PathTry with real students: number of testers, understanding before/after, % who learned something new, % who realised a profession is not for them, realism and usability scores, and quotes. The "Tested with real students" section on the home and About pages appears **only when `testers > 0`**, and each number is shown only when it is filled in — the site never shows placeholder or estimated numbers.
+Pilot survey (Google Forms, September 2026): **8 participants, 7 of them school students**. Each tried one profession and answered questions before and after.
+
+| Result | Value |
+| --- | --- |
+| Understanding of the day-to-day work, before → after (1–5) | 4.0 → 4.4 |
+| Learned something new about the real work | 100% |
+| Found the profession more interesting | 75% |
+| Would recommend PathTry to a friend | 75% |
+| Realised the profession is probably not for them | 12.5% (1 of 8) |
+| How close the tasks feel to real work (1–5) | 4.1 |
+| Ease of use (1–5) | 4.3 |
+| PathFinder usefulness among those who used it (1–5) | 4.3 |
+
+Participants liked the interface and the questions; they asked for a more reliable PathFinder (now with a fallback mode) and more realistic situations in tasks (next content update). The numbers live in `src/data/validation.ts` and render in the "Tested with real students" section only when real data is present.
 
 ## AI tools used
 

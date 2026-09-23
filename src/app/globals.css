@@ -847,3 +847,10 @@ main { overflow-x:clip; }
 .mark-dash { display:block; width:12px; height:2.5px; border-radius:2px; background:currentColor; }
 /* In the stacked phone layout a flex-basis would become height: keep the contact field one line tall. */
 @media (max-width:760px) { .lead-row .lead-field { flex:none; } }
+.validation-grid { grid-template-columns:repeat(4, 1fr); }
+.validation-grid .impact-card strong { font-size:36px; }
+.feedback-summary { margin-top:16px; }
+.feedback-summary ul { margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:14px; line-height:1.6; }
+@media (max-width:1024px) { .validation-grid { grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:520px) { .validation-grid { gap:10px; } .validation-grid .impact-card { padding:16px; } .validation-grid .impact-card strong { font-size:26px; letter-spacing:-.5px; } .validation-grid .impact-card p { font-size:13px; } }
+.feedback-summary ul { list-style:disc; }
