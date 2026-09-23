@@ -17,16 +17,17 @@ function persist(language: Language) {
 export function LanguageProvider({ children, initialLanguage }: { children: React.ReactNode; initialLanguage: Language }) {
   const router = useRouter();
   const [language, setLanguageState] = useState<Language>(initialLanguage);
-  useEffect(() => {
-    // Visitors from before the cookie existed keep the language they chose earlier.
-    let saved: string | null = null;
-    try { saved = localStorage.getItem('pathtry-language'); } catch { /* storage may be blocked */ }
-    const next = saved === 'ru' || saved === 'en' ? saved : initialLanguage;
-    setLanguageState(next);
-    persist(next);
-  }, [initialLanguage]);
+  // The server already picked the language (?lang=, cookie, or browser); the client just follows it.
+  useEffect(() => { setLanguageState(initialLanguage); persist(initialLanguage); }, [initialLanguage]);
   // Refreshing re-renders server-side parts (page titles) in the new language without a reload.
-  const setLanguage = (next: Language) => { setLanguageState(next); persist(next); router.refresh(); };
+  // A ?lang= in the address would switch it straight back, so it is dropped on a manual switch.
+  const setLanguage = (next: Language) => {
+    setLanguageState(next); persist(next);
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has('lang')) { router.refresh(); return; }
+    url.searchParams.delete('lang');
+    router.replace(`${url.pathname}${url.search}${url.hash}`, { scroll: false });
+  };
   return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>;
 }
 

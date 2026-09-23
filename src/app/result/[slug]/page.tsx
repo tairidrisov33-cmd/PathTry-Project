@@ -11,7 +11,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!definition) return {};
   const ru = (await serverLanguage()) === 'ru';
   const title = definition.title[ru ? 1 : 0].replace(/­/g, '');
-  return { title: ru ? `Мой результат: ${title} — PathTry` : `My result: ${title} — PathTry` };
+  // Personal snapshots: kept out of search engines.
+  return { title: ru ? `Мой результат: ${title} — PathTry` : `My result: ${title} — PathTry`, robots: { index: false, follow: true }, alternates: { canonical: `/result/${definition.slug}` } };
 }
 
 export default async function ResultPage({ params }: Params) {
