@@ -6,6 +6,7 @@ import { ui } from '@/data/translations';
 import { useLanguage } from '@/components/LanguageProvider';
 import { gradeOffline, type Review, type Verdict } from '@/lib/grader';
 import { askPathfinder, setTaskContext } from '@/lib/taskContext';
+import { track } from '@vercel/analytics';
 import Icon, { type IconName } from '@/components/Icon';
 
 type EnjoymentKey = 'yes' | 'so-so' | 'no' | 'skipped';
@@ -44,8 +45,8 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
   const hasAnswer = task.type === 'choice' ? choice !== null : text.trim().length > 0;
   const isLast = step === total - 1;
   const t = ru
-    ? { hint: 'Подсказка PathFinder', ask: 'Спросить PathFinder', askText: 'Помоги мне разобраться с этим заданием, но не говори ответ.', insight: 'Взгляд профессионала', reviewingTitle: 'PathFinder читает ответ', rewrite: 'Переписать ответ', sample: 'Как ответил бы специалист', ai: 'Проверено PathFinder AI', rubric: 'Проверено PathFinder по критериям задания', drive: 'Интерес и энергия', driveEmpty: 'Отмечай, как тебе задания', driveLevels: ['Низкая', 'Разогреваешься', 'Высокая'], of: 'из', optional: 'необязательно', verdicts: { strong: 'Сильный ответ', partial: 'Частично', offtopic: 'Не по заданию', empty: 'Слишком коротко' } }
-    : { hint: 'Hint from PathFinder', ask: 'Ask PathFinder', askText: 'Help me think through this task without giving me the answer.', insight: 'Pro insight', reviewingTitle: 'PathFinder is reading your answer', rewrite: 'Rewrite answer', sample: 'How a pro might answer', ai: 'Reviewed by PathFinder AI', rubric: 'Reviewed by PathFinder against the task criteria', drive: 'Interest & energy', driveEmpty: 'Rate tasks to see it', driveLevels: ['Low', 'Warming up', 'High'], of: 'of', optional: 'optional', verdicts: { strong: 'Strong answer', partial: 'Partly there', offtopic: 'Off the task', empty: 'Too short to review' } };
+    ? { hint: 'Подсказка PathFinder', ask: 'Спросить PathFinder', askText: 'Помоги мне разобраться с этим заданием, но не говори ответ.', insight: 'Взгляд профессионала', reviewingTitle: 'PathFinder читает ответ', rewrite: 'Переписать ответ', sample: 'Как ответил бы специалист', ai: 'Проверено PathFinder AI', rubric: 'Проверено PathFinder по критериям задания', drive: 'Интерес и энергия', driveEmpty: 'Отмечай, как тебе задания', driveLevels: ['Низкая', 'Разогреваешься', 'Высокая'], of: 'из', done: 'Выполнено', optional: 'необязательно', verdicts: { strong: 'Сильный ответ', partial: 'Частично', offtopic: 'Не по заданию', empty: 'Слишком коротко' } }
+    : { hint: 'Hint from PathFinder', ask: 'Ask PathFinder', askText: 'Help me think through this task without giving me the answer.', insight: 'Pro insight', reviewingTitle: 'PathFinder is reading your answer', rewrite: 'Rewrite answer', sample: 'How a pro might answer', ai: 'Reviewed by PathFinder AI', rubric: 'Reviewed by PathFinder against the task criteria', drive: 'Interest & energy', driveEmpty: 'Rate tasks to see it', driveLevels: ['Low', 'Warming up', 'High'], of: 'of', done: 'Completed', optional: 'optional', verdicts: { strong: 'Strong answer', partial: 'Partly there', offtopic: 'Off the task', empty: 'Too short to review' } };
 
   useEffect(() => {
     try {
@@ -67,6 +68,7 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
 
   const submitAnswer = useCallback(async () => {
     if (!hasAnswer || submitted) return;
+    if (step === 0 && answers.length === 0) track('experiment_started', { profession: definition.slug, language });
     setSubmitted(true);
     setShowHint(false);
     setVariant((current) => current + 1 + Math.floor(Math.random() * 3));
@@ -80,7 +82,7 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
       setReview(gradeOffline(text, { prompt: task.prompt, criteria: task.criteria ?? '', hint: task.hint, keywords: task.keywords ?? [] }, language));
     }
     setReviewing(false);
-  }, [hasAnswer, submitted, task, text, definition.slug, language]);
+  }, [hasAnswer, submitted, task, text, definition.slug, language, step, answers.length]);
 
   const rewrite = () => { setSubmitted(false); setReview(null); window.setTimeout(() => textRef.current?.focus(), 30); };
 
@@ -91,6 +93,7 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
     localStorage.setItem(key, JSON.stringify({ answers: nextAnswers }));
     if (isLast) {
       setLeaving(true);
+      track('experiment_completed', { profession: definition.slug, score: nextAnswers.reduce((sum, answer) => sum + answer.score, 0), total, language });
       sessionStorage.setItem('pathtry-celebrate', definition.slug);
       document.body.classList.add('page-exit');
       window.setTimeout(() => { window.location.href = `/result/${definition.slug}`; }, 260);
@@ -98,7 +101,7 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
     }
     setAnswers(nextAnswers); setStep(step + 1); setChoice(null); setText(''); setEnjoyment(null); setSubmitted(false); setReview(null); setShowHint(false);
     window.scrollTo({ top: Math.max(0, (document.querySelector('.task-meta') as HTMLElement | null)?.offsetTop ?? 0) - 90, behavior: 'smooth' });
-  }, [submitted, reviewing, leaving, task, choice, text, review, answers, enjoyment, isLast, key, definition.slug, step]);
+  }, [submitted, reviewing, leaving, task, choice, text, review, answers, enjoyment, isLast, key, definition.slug, step, total, language]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -132,13 +135,13 @@ export default function TaskRunner({ definition }: { definition: ProfessionDef }
       return <button className={`option ${state}`} onClick={() => !submitted && setChoice(index)} type="button" role="radio" aria-checked={choice === index} disabled={submitted && state === 'dim'} key={option}><span className="option-letter">{letters[index]}</span><span className="option-text">{option}</span><span className="option-check">{submitted && index === task.answer ? <Icon name="check" size={13} strokeWidth={3} /> : submitted && choice === index ? <Icon name="x" size={12} strokeWidth={3} /> : choice === index ? <span className="option-dot" /> : null}</span></button>;
     })}
     {submitted && <div className={`feedback ${correct ? 'is-good' : 'is-tip'}`}><span className="feedback-icon"><Icon name={correct ? 'sparkle' : 'bulb'} size={17} /></span><div><span className="insight-label">{t.insight}</span><strong>{phrase(correct ? uiText.strongVariants : uiText.rethinkVariants)}</strong><p>{task.explanation}</p></div></div>}
-  </div> : <div className="text-answer-wrap"><textarea ref={textRef} className="text-answer" value={text} onChange={(event) => !submitted && setText(event.target.value)} placeholder={task.placeholder} disabled={submitted} aria-describedby="text-goal" /><div className="text-meter" id="text-goal"><span className="text-meter-note"><Icon name="sparkle" size={13} />{uiText.charsGoal}</span><span>{text.trim().length} {uiText.chars}</span></div>{!submitted && <p className="text-hint">Ctrl + Enter</p>}</div>;
+  </div> : <div className="text-answer-wrap"><textarea ref={textRef} className="text-answer" value={text} onChange={(event) => !submitted && setText(event.target.value)} placeholder={task.placeholder} disabled={submitted} maxLength={1000} aria-describedby="text-goal" /><div className="text-meter" id="text-goal"><span className="text-meter-note"><Icon name="sparkle" size={13} />{uiText.charsGoal}</span><span>{text.length} / 1000</span></div>{!submitted && <p className="text-hint">Ctrl + Enter</p>}</div>;
 
   const enjoyOptions = [{ key: 'yes', label: uiText.yes, icon: 'smile' }, { key: 'so-so', label: uiText.soSo, icon: 'meh' }, { key: 'no', label: uiText.no, icon: 'frown' }] as const;
 
   return <div>
-    <div className="task-meta"><span>{uiText.task} <b>{step + 1}</b> {t.of} {total}</span><span>{Math.round((step / total) * 100)}% {uiText.complete}</span></div>
-    <div className="progress-steps" style={{ '--n': total } as React.CSSProperties} role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={step}>{profession.tasks.map((item, index) => <span key={item.id} className={index < step ? progressClass(answers[index]) : index === step ? 'current' : ''} />)}</div>
+    <div className="task-meta"><span>{uiText.task} <b>{step + 1}</b> {t.of} {total}</span><span className="task-meta-done">{t.done}: <b>{Math.round((step / total) * 100)}%</b></span></div>
+    <div className="progress-steps" style={{ '--n': total } as React.CSSProperties} role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={step} aria-valuetext={`${step} / ${total}`}>{profession.tasks.map((item, index) => <span key={item.id} className={index < step ? progressClass(answers[index]) : index === step ? 'current' : ''} />)}</div>
     <div className="drive-meter" aria-live="polite"><span className="drive-label"><Icon name="flame" size={15} />{t.drive}</span><span className="drive-track"><span style={{ width: `${energy ?? 0}%` }} className={energy === null ? '' : energy < 40 ? 'is-low' : energy < 70 ? 'is-mid' : 'is-high'} /></span><b>{energyText}</b></div>
     <div className="task-box" key={task.id}>
       <div className="task-chips"><span className="task-chip"><Icon name={task.type === 'choice' ? 'target' : 'pencil'} size={14} />{task.type === 'choice' ? uiText.choiceType : uiText.textType}</span>{task.type === 'choice' && !submitted && <span className="task-keys"><Icon name="keyboard" size={14} />{uiText.keysHint}</span>}{submitted && <span className="task-keys"><Icon name="keyboard" size={14} />{uiText.enterHint}</span>}</div>

@@ -52,8 +52,10 @@ export function gradeOffline(answer: string, task: GradableTask, language: Langu
   }
 
   const strong = relevance >= 2 && words.length >= 8 && (reasoned || specific || relevance >= 4);
-  const shown = matched.slice(0, 3).map((word) => `«${word.replace(/[^\p{L}\d ]/gu, '').trim()}»`).filter((word) => word.length > 2);
-  const covered = shown.length ? (ru ? ` Ты затрагиваешь: ${shown.join(', ')}.` : ` You cover: ${shown.join(', ').replace(/«|»/g, '"')}.`) : '';
+  // Quote the student's own words that matched, not the internal keyword stems.
+  const tokens = clean.split(/[^\p{L}\d-]+/u).filter(Boolean);
+  const shown = [...new Set(matched.map((keyword) => keyword.replace(/[^\p{L}\d ]/gu, '').trim().toLowerCase()).filter((keyword) => keyword.length >= 3).map((keyword) => tokens.find((token) => token.toLowerCase().includes(keyword))).filter((word): word is string => Boolean(word)))].slice(0, 3);
+  const covered = shown.length ? (ru ? ` Ты затрагиваешь: ${shown.map((word) => `«${word}»`).join(', ')}.` : ` You cover: ${shown.map((word) => `"${word}"`).join(', ')}.`) : '';
 
   if (strong) {
     const extra = !reasoned ? (ru ? ' Чтобы звучать ещё профессиональнее, добавь «почему» — одну причину.' : ' To sound even more professional, add a “why” — one reason.') : !specific ? (ru ? ' Можно усилить конкретикой: пример, число или порядок шагов.' : ' You could add a concrete detail: an example, a number, or the order of steps.') : '';

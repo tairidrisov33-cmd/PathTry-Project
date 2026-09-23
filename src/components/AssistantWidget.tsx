@@ -26,6 +26,8 @@ export default function AssistantWidget() {
   const page = pathname.startsWith('/result') ? 'result' : pathname.startsWith('/try') ? 'try' : 'home';
 
   useEffect(() => { listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' }); }, [messages, loading]);
+  // A new language starts a fresh conversation, so old replies never mix languages.
+  useEffect(() => { setMessages([]); }, [language]);
   useEffect(() => {
     if (!open) return;
     inputRef.current?.focus();
@@ -39,12 +41,13 @@ export default function AssistantWidget() {
     if (!question || loading) return;
     setInput('');
     setOpen(true);
-    const history = [...messages, { role: 'user' as const, content: question }];
+    const history = [...messages, { role: 'user' as const, content: question.slice(0, 1000) }];
     setMessages(history);
     setLoading(true);
     try {
       const response = await fetch('/api/assistant', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history, language, context: window.location.pathname, task: getTaskContext() }) });
       const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
       setMessages((current) => [...current, { role: 'assistant', content: data.answer || (ru ? 'Попробуй сформулировать вопрос чуть иначе.' : 'Try asking that in a slightly different way.') }]);
     } catch {
       setMessages((current) => [...current, { role: 'assistant', content: ru ? 'PathFinder временно недоступен. Ты всё равно можешь продолжить эксперимент.' : 'PathFinder is temporarily unavailable. You can still continue your experiment.' }]);
@@ -66,7 +69,7 @@ export default function AssistantWidget() {
         {messages.map((message, index) => <div className={`assistant-message ${message.role}`} key={`${message.role}-${index}`}>{message.content}</div>)}
         {loading && <div className="assistant-message assistant typing-dots" aria-label={ru ? 'Думаю' : 'Thinking'}><i /><i /><i /></div>}
       </div>
-      <form className="assistant-input" onSubmit={(event) => { event.preventDefault(); send(); }}><input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} placeholder={ru ? 'Например: что проверяет это задание?' : 'For example: what does this task test?'} /><button type="submit" disabled={!input.trim() || loading} aria-label={ru ? 'Отправить' : 'Send'}><Icon name="send" size={16} /></button></form>
+      <form className="assistant-input" onSubmit={(event) => { event.preventDefault(); send(); }}><input ref={inputRef} maxLength={1000} value={input} onChange={(event) => setInput(event.target.value)} placeholder={ru ? 'Например: что проверяет это задание?' : 'For example: what does this task test?'} /><button type="submit" disabled={!input.trim() || loading} aria-label={ru ? 'Отправить' : 'Send'}><Icon name="send" size={16} /></button></form>
     </div>}
     <button className="assistant-launcher" type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={ru ? 'Открыть PathFinder' : 'Open PathFinder'}><span className="assistant-spark"><Icon name={open ? 'x' : 'compassNav'} size={17} /></span><span>PathFinder</span></button>
   </div>;
