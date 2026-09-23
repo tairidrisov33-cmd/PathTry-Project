@@ -103,7 +103,7 @@ Pilot survey (Google Forms, September 2026): **8 participants, 7 of them school 
 | Learned something new about the real work | 100% |
 | Found the profession more interesting | 75% |
 | Would recommend PathTry to a friend | 75% |
-| Realised the profession is probably not for them | 12.5% (1 of 8) |
+| Result matched how they felt (fully or partly) | 100% |
 | How close the tasks feel to real work (1–5) | 4.1 |
 | Ease of use (1–5) | 4.3 |
 | PathFinder usefulness among those who used it (1–5) | 4.3 |

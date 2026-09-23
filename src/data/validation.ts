@@ -27,8 +27,10 @@ export const validation = {
   learnedNewPercent: 100 as number | null,
   /** % who found the profession more interesting afterwards. */
   moreInterestedPercent: 75 as number | null,
-  /** % who realised the profession is probably not for them (a useful outcome). */
-  notForMePercent: 12.5 as number | null,
+  /** % who realised the profession is probably not for them (not shown on the site). */
+  notForMePercent: null as number | null,
+  /** % whose final result matched how they felt about the profession (fully or partly). */
+  resultMatchedPercent: 100 as number | null,
   /** % who would recommend PathTry to a friend choosing a career. */
   recommendPercent: 75 as number | null,
   /** Average rating of how realistic the tasks felt (1–5). */
