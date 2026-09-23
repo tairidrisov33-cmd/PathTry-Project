@@ -72,7 +72,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     <div className="scroll-progress" ref={progressRef} aria-hidden="true" />
     <div className="header-shell" ref={headerRef}><header className="site-header"><a className="logo" href="/"><LogoMark />path<span>try</span></a><div className="header-tools"><span className="header-note">{text.headerNote}</span><LanguageToggle /><ThemeToggle /></div></header></div>
     {children}
-    <footer className="footer"><div className="footer-brand"><span className="logo"><LogoMark />path<span>try</span></span><span>{text.footer}</span></div><button className="to-top" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><Icon name="arrowUp" size={15} />{language === 'ru' ? 'Наверх' : 'Back to top'}</button></footer>
+    <footer className="footer"><div className="footer-brand"><span className="logo"><LogoMark />path<span>try</span></span><span>{text.footer}</span><a className="footer-link" href="/#partners"><Icon name="building" size={14} />{language === 'ru' ? 'Для вузов и EdTech' : 'For universities & EdTech'}</a></div><button className="to-top" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><Icon name="arrowUp" size={15} />{language === 'ru' ? 'Наверх' : 'Back to top'}</button></footer>
     <AssistantWidget />
   </>;
 }

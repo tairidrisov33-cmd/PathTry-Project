@@ -49,7 +49,21 @@ const paths = {
   keyboard: <><rect x="2" y="6" width="20" height="12" rx="2" /><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8" /></>,
   pencil: <><path d="M17 3a2.8 2.8 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></>,
   trophy: <><path d="M8 21h8" /><path d="M12 17v4" /><path d="M7 4h10v5a5 5 0 0 1-10 0Z" /><path d="M17 5h3v2a3 3 0 0 1-3 3" /><path d="M7 5H4v2a3 3 0 0 0 3 3" /></>,
-  send: <><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></>
+  send: <><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></>,
+  lock: <><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /><circle cx="12" cy="16" r="1.2" /></>,
+  gamepad: <><path d="M6 8h12a4 4 0 0 1 3.9 4.9l-1 4.3a2.5 2.5 0 0 1-4.3 1.1L14.5 16h-5l-2.1 2.3a2.5 2.5 0 0 1-4.3-1.1l-1-4.3A4 4 0 0 1 6 8Z" /><path d="M7.5 11v3M6 12.5h3" /><path d="M15.5 12h.01M17.5 13.5h.01" /></>,
+  pulse: <><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 1-.2 1.9-.6 2.8" /><path d="M3 13h4l2-3 3 6 2-3h7" /></>,
+  paw: <><circle cx="6.5" cy="10" r="1.8" /><circle cx="10" cy="6" r="1.8" /><circle cx="14" cy="6" r="1.8" /><circle cx="17.5" cy="10" r="1.8" /><path d="M12 11c-2.5 0-5 3.2-5 5.8 0 1.6 1.2 2.7 2.8 2.7 1 0 1.5-.5 2.2-.5s1.2.5 2.2.5c1.6 0 2.8-1.1 2.8-2.7C17 14.2 14.5 11 12 11Z" /></>,
+  film: <><rect x="3" y="9" width="18" height="12" rx="2" /><path d="m3 9 16.5-4.5.8 3L3 12" /><path d="m8.5 7.5 2 3M14 6l2 3" /></>,
+  flame: <path d="M12 21c3.9 0 7-2.7 7-6.6 0-3.1-2-5.2-3.5-6.9-.4 1.6-1.3 2.7-2.5 3.1.4-2.7-.4-5.8-3.5-7.6.2 2.6-1.1 4.4-2.6 6C5.6 10.4 5 12 5 14.4 5 18.3 8.1 21 12 21Z" />,
+  bolt: <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />,
+  trend: <><path d="m3 17 6-6 4 4 8-8" /><path d="M15 7h6v6" /></>,
+  star: <path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z" />,
+  building: <><path d="M4 21V5l8-3 8 3v16" /><path d="M2 21h20" /><path d="M9 21v-4h6v4" /><path d="M8 8h.01M12 8h.01M16 8h.01M8 12h.01M12 12h.01M16 12h.01" /></>,
+  mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+  compassNav: <><circle cx="12" cy="12" r="9" /><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" /></>,
+  users: <><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20a6.5 6.5 0 0 1 13 0" /><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8" /><path d="M18.5 14.2A6.5 6.5 0 0 1 21.5 20" /></>,
+  map: <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z" /><path d="M9 3v15M15 6v15" /></>
 } as const;
 
 export type IconName = keyof typeof paths;
@@ -60,7 +74,8 @@ export default function Icon({ name, size = 20, strokeWidth = 1.9, className, st
 
 export const professionIcons: Record<string, IconName> = {
   'software-developer': 'code', doctor: 'stethoscope', lawyer: 'scale', psychologist: 'chatHeart', designer: 'pen',
-  journalist: 'mic', architect: 'compass', teacher: 'cap', entrepreneur: 'rocket', 'data-analyst': 'chart'
+  journalist: 'mic', architect: 'compass', teacher: 'cap', entrepreneur: 'rocket', 'data-analyst': 'chart',
+  'cybersecurity-specialist': 'lock', 'game-developer': 'gamepad', nurse: 'pulse', veterinarian: 'paw', filmmaker: 'film'
 };
 
-export const professionColors: Record<string, string> = { coral: '#f16d59', teal: '#2a9d8f', gold: '#e1a33f', lilac: '#9b82c8', blue: '#3867db' };
+export const professionColors: Record<string, string> = { coral: '#f16d59', teal: '#2a9d8f', gold: '#e1a33f', lilac: '#9b82c8', blue: '#3867db', green: '#3f9b5f', rose: '#d6577c' };

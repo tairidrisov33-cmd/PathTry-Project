@@ -1,12 +1,8 @@
-// New 15-profession catalog. Not wired into the UI yet: src/data/professions.ts still serves the live site.
+// Catalog helpers with no catalog data, so client pages that show one profession stay small.
 import type { Language } from '@/data/translations';
 import type { CategoryKey, ColorKey, L, ProfessionDef, Skill } from '@/data/catalog/types';
-import { tech } from '@/data/catalog/tech';
-import { health } from '@/data/catalog/health';
-import { creative } from '@/data/catalog/creative';
-import { society } from '@/data/catalog/society';
 
-export type { CategoryKey, ProfessionDef, Skill } from '@/data/catalog/types';
+export type { CategoryKey, ColorKey, ProfessionDef, Skill } from '@/data/catalog/types';
 
 export type Task = {
   id: string;
@@ -38,19 +34,16 @@ export type Profession = {
   tasks: Task[];
 };
 
-export const professions: ProfessionDef[] = [...tech, ...health, ...creative, ...society];
-
 export const categories: { key: CategoryKey; label: L }[] = [
   { key: 'tech', label: ['Tech & Data', 'Технологии и данные'] },
-  { key: 'health', label: ['Health & Care', 'Здоровье и медицина'] },
+  { key: 'health', label: ['Healthcare & Science', 'Здоровье и наука'] },
   { key: 'creative', label: ['Creative & Media', 'Творчество и медиа'] },
-  { key: 'society', label: ['Society & Business', 'Общество и бизнес'] }
+  { key: 'society', label: ['Humanities & Law', 'Гуманитарные науки и право'] }
 ];
 
-export const TASKS_PER_PROFESSION = 10;
-export const TOTAL_TASKS = professions.reduce((total, profession) => total + profession.tasks.length, 0);
+// Bumped when the task set changes so progress saved for an older version is ignored.
+export const storageKey = (slug: string) => `pathtry-v2-${slug}`;
 
-export function getProfession(slug: string) { return professions.find((profession) => profession.slug === slug); }
 
 const pick = (value: L, language: Language) => value[language === 'ru' ? 1 : 0];
 
@@ -91,3 +84,4 @@ export function categoryLabel(key: CategoryKey, language: Language) {
   const category = categories.find((item) => item.key === key);
   return category ? pick(category.label, language) : key;
 }
+
