@@ -8,14 +8,15 @@ import { serverLanguage } from '@/lib/serverLanguage';
 import { pageAlternates, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const ru = (await serverLanguage()) === 'ru';
+  const language = await serverLanguage();
+  const ru = language === 'ru';
   const title = ru ? 'PathTry — попробуй профессию до того, как выбрать её' : 'PathTry — Try a profession before you choose it';
   const description = ru ? '10 реальных рабочих задач за 10 минут и AI-наставник PathFinder: пойми, подходит ли тебе профессия, до выбора специальности.' : 'Ten real-world tasks in ten minutes with an AI mentor: find out whether a career fits you before you choose a major.';
   return {
     metadataBase: new URL(SITE_URL),
     title, description,
     applicationName: 'PathTry',
-    alternates: pageAlternates('/'),
+    alternates: pageAlternates('/', language),
     openGraph: { type: 'website', siteName: 'PathTry', title, description, url: '/', locale: ru ? 'ru_RU' : 'en_US', alternateLocale: ru ? 'en_US' : 'ru_RU' },
     twitter: { card: 'summary_large_image', title, description },
     // Ownership tags for Google Search Console and Yandex Webmaster (public by design; env vars override).

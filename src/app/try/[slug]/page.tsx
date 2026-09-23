@@ -11,12 +11,13 @@ type Params = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const definition = getProfession((await params).slug);
   if (!definition) return {};
-  const ru = (await serverLanguage()) === 'ru';
+  const language = await serverLanguage();
+  const ru = language === 'ru';
   const title = definition.title[ru ? 1 : 0].replace(/­/g, '');
   const pageTitle = ru ? `${title}: попробуй профессию за 10 минут — PathTry` : `Try being ${/^[AEIOU]/.test(title) ? 'an' : 'a'} ${title} in 10 minutes — PathTry`;
   const description = definition.description[ru ? 1 : 0];
   const path = `/try/${definition.slug}`;
-  return { title: pageTitle, description, alternates: pageAlternates(path), openGraph: { type: 'website', siteName: 'PathTry', title: pageTitle, description, url: path, locale: ru ? 'ru_RU' : 'en_US' }, twitter: { card: 'summary_large_image', title: pageTitle, description } };
+  return { title: pageTitle, description, alternates: pageAlternates(path, language), openGraph: { type: 'website', siteName: 'PathTry', title: pageTitle, description, url: path, locale: ru ? 'ru_RU' : 'en_US' }, twitter: { card: 'summary_large_image', title: pageTitle, description } };
 }
 
 export default async function TryPage({ params }: Params) {
