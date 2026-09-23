@@ -12,6 +12,7 @@ export default function LeadCapture({ language, type, profession, professionTitl
   const [contact, setContact] = useState('');
   const [organization, setOrganization] = useState('');
   const [website, setWebsite] = useState('');
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [error, setError] = useState('');
   const partner = type === 'partner';
@@ -21,7 +22,7 @@ export default function LeadCapture({ language, type, profession, professionTitl
     text: partner ? 'Оставьте контакт — пришлём демо аналитики и условия пилота.' : 'Мы собираем персональные дорожные карты: вузы и программы, онлайн-курсы, проекты для портфолио. Оставь контакт — пришлём твою, как только она будет готова.',
     bullets: partner ? [] : ['Подборка вузов и курсов', 'Проекты для портфолио', 'План на 12 недель'],
     placeholder: 'Email или @username в Telegram', org: 'Вуз или компания', send: partner ? 'Запросить демо' : 'Хочу дорожную карту', sending: 'Отправляем…',
-    invalid: 'Введи корректный email или Telegram-ник (например, @pathtry_user).', failed: 'Не получилось отправить. Попробуй ещё раз.',
+    invalid: 'Введи корректный email или Telegram-ник (например, @pathtry_user).', failed: 'Не получилось отправить. Попробуй ещё раз.', tooMany: 'Слишком много попыток. Подожди минуту и попробуй снова.', consentLabel: partner ? 'Согласен(на), чтобы PathTry связался со мной по этой заявке.' : 'Согласен(на), чтобы PathTry написал мне по этому контакту о дорожной карте.', consentMissing: 'Отметь согласие, чтобы мы могли с тобой связаться.',
     done: partner ? 'Спасибо! Мы свяжемся с вами в течение двух рабочих дней.' : 'Ты в списке! Пришлём дорожную карту, как только она будет готова, на', consent: 'Никакого спама — только то, что ты запросил(а). Отписаться можно в любой момент.'
   } : {
     kicker: partner ? 'For universities & EdTech' : 'Personal roadmap',
@@ -29,7 +30,7 @@ export default function LeadCapture({ language, type, profession, professionTitl
     text: partner ? 'Leave a contact and we will send an analytics demo and pilot terms.' : 'We are building personal roadmaps: universities and programmes, online courses, and portfolio projects. Leave a contact and we will send yours as soon as it is ready.',
     bullets: partner ? [] : ['Universities & courses', 'Portfolio projects', '12-week plan'],
     placeholder: 'Email or Telegram @username', org: 'University or company', send: partner ? 'Request a demo' : 'Request my roadmap', sending: 'Sending…',
-    invalid: 'Enter a valid email or Telegram username (e.g. @pathtry_user).', failed: 'Could not send. Please try again.',
+    invalid: 'Enter a valid email or Telegram username (e.g. @pathtry_user).', failed: 'Could not send. Please try again.', tooMany: 'Too many attempts. Please wait a minute and try again.', consentLabel: partner ? 'I agree that PathTry may contact me about this request.' : 'I agree that PathTry may contact me at this address about my roadmap.', consentMissing: 'Please tick the consent box so we can contact you.',
     done: partner ? 'Thank you! We will get back to you within two business days.' : 'You are on the list! We will send your roadmap as soon as it is ready to', consent: 'No spam — only what you asked for. Unsubscribe any time.'
   };
 
@@ -37,9 +38,11 @@ export default function LeadCapture({ language, type, profession, professionTitl
     event.preventDefault();
     const normalized = normalizeContact(contact);
     if (!normalized) { setError(t.invalid); return; }
+    if (!consent) { setError(t.consentMissing); return; }
     setError(''); setStatus('sending');
     try {
-      const response = await fetch('/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, contact: normalized.value, profession, match, organization: organization || undefined, language, website }) });
+      const response = await fetch('/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, contact: normalized.value, profession, match, organization: organization.trim() || undefined, language, website, consent }) });
+      if (response.status === 429) { setStatus('error'); setError(t.tooMany); return; }
       if (!response.ok) throw new Error('lead failed');
       setContact(normalized.value);
       setStatus('done');
@@ -49,9 +52,10 @@ export default function LeadCapture({ language, type, profession, professionTitl
   return <section className={`lead-card ${partner ? 'is-partner' : ''}`} aria-live="polite">
     <div className="lead-copy"><span className="panel-kicker"><Icon name={partner ? 'building' : 'map'} size={14} />{t.kicker}</span><h2>{t.title}</h2><p>{t.text}</p>{t.bullets.length > 0 && <ul className="lead-bullets">{t.bullets.map((item) => <li key={item}><Icon name="check" size={13} strokeWidth={2.6} />{item}</li>)}</ul>}</div>
     {status === 'done' ? <div className="lead-done" role="status"><span className="lead-done-icon"><Icon name="check" size={22} strokeWidth={2.6} /></span><p>{t.done}{!partner && <> <b>{contact}</b></>}</p></div> : <form className="lead-form" onSubmit={submit} noValidate>
-      {partner && <input className="lead-input" value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.org} aria-label={t.org} autoComplete="organization" />}
-      <div className="lead-row"><span className="lead-field"><Icon name="mail" size={17} /><input value={contact} onChange={(event) => { setContact(event.target.value); if (error) setError(''); }} placeholder={t.placeholder} aria-label={t.placeholder} aria-invalid={Boolean(error)} autoComplete="email" inputMode="email" /></span><button className="btn btn-primary" type="submit" disabled={status === 'sending' || !contact.trim()}>{status === 'sending' ? t.sending : t.send}<Icon name="send" size={15} /></button></div>
+      {partner && <input className="lead-input" maxLength={120} value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={t.org} aria-label={t.org} autoComplete="organization" />}
+      <div className="lead-row"><span className="lead-field"><Icon name="mail" size={17} /><input maxLength={120} value={contact} onChange={(event) => { setContact(event.target.value); if (error) setError(''); }} placeholder={t.placeholder} aria-label={t.placeholder} aria-invalid={Boolean(error)} autoComplete="email" inputMode="email" /></span><button className="btn btn-primary" type="submit" disabled={status === 'sending' || !contact.trim() || !consent}>{status === 'sending' ? t.sending : t.send}<Icon name="send" size={15} /></button></div>
       <input className="lead-honeypot" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} aria-hidden="true" />
+      <label className="lead-check"><input type="checkbox" checked={consent} onChange={(event) => { setConsent(event.target.checked); if (error) setError(''); }} required /><span>{t.consentLabel}</span></label>
       {error ? <p className="lead-error" role="alert">{error}</p> : <p className="lead-consent">{t.consent}</p>}
     </form>}
   </section>;

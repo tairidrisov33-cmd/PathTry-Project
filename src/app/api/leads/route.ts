@@ -14,16 +14,21 @@ export async function POST(request: Request) {
   // Honeypot: real users never see or fill this field.
   if (payload.website) return NextResponse.json({ ok: true });
 
+  if (payload.type !== 'partner' && payload.type !== 'roadmap') return badRequest();
+  if (payload.organization !== undefined && !isShortString(payload.organization, 120)) return badRequest();
+  if (payload.profession !== undefined && !(isShortString(payload.profession, 60) && /^[a-z-]+$/.test(payload.profession))) return badRequest();
+  if (payload.match !== undefined && !(typeof payload.match === 'number' && payload.match >= 0 && payload.match <= 100)) return badRequest();
+  if (payload.consent !== true) return NextResponse.json({ ok: false, error: 'consent' }, { status: 422 });
   const contact = normalizeContact(payload.contact);
   if (!contact) return NextResponse.json({ ok: false, error: 'contact' }, { status: 422 });
 
   const lead = {
-    type: payload.type === 'partner' ? 'partner' : 'roadmap',
+    type: payload.type,
     contact: contact.value,
     channel: contact.kind,
-    profession: isShortString(payload.profession, 60) ? payload.profession : undefined,
-    match: typeof payload.match === 'number' && Number.isFinite(payload.match) ? Math.round(payload.match) : undefined,
-    organization: isShortString(payload.organization, 120) ? payload.organization : undefined,
+    profession: payload.profession as string | undefined,
+    match: typeof payload.match === 'number' ? Math.round(payload.match) : undefined,
+    organization: typeof payload.organization === 'string' && payload.organization.trim() ? payload.organization.trim() : undefined,
     language: payload.language === 'ru' ? 'ru' : 'en',
     createdAt: new Date().toISOString()
   };
