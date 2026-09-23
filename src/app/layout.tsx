@@ -7,5 +7,5 @@ export const metadata: Metadata = { title: 'PathTry — Try a profession before 
 export const viewport: Viewport = { themeColor: [{ media: '(prefers-color-scheme: light)', color: '#f7f8f3' }, { media: '(prefers-color-scheme: dark)', color: '#121917' }] };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: `try { if (localStorage.getItem('pathtry-theme') === 'dark') { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } } catch {}` }} /></head><body><LanguageProvider><SiteChrome>{children}</SiteChrome></LanguageProvider></body></html>;
+  return <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js'); try { if (localStorage.getItem('pathtry-theme') === 'dark') { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } } catch {}` }} /></head><body><LanguageProvider><SiteChrome>{children}</SiteChrome></LanguageProvider></body></html>;
 }
