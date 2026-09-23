@@ -71,7 +71,7 @@ async function gradeWithFreeModel(answer: string, task: GradeInput, language: La
   const text = await freeCompletion([
     { role: 'system', content: `${gradingSystem(task, language)}\nRespond with JSON only, exactly in this shape: {"verdict": "strong" | "partial" | "offtopic", "feedback": "...", "tip": "..."}` },
     { role: 'user', content: gradingInput(answer, task) }
-  ], { json: true, maxTokens: 700 });
+  ], { json: true, maxTokens: 1200 });
   if (!text) return null;
   try {
     const parsed = ReviewSchema.safeParse(JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g, '')));
@@ -118,5 +118,5 @@ function breakdownSystem(language: Language) {
 export function breakdownWithAI(summary: string, language: Language) {
   const system = breakdownSystem(language);
   const history: ChatHistory = [{ role: 'user', content: summary }];
-  return firstAnswer([() => chatWithClaude(history, system), () => freeCompletion([{ role: 'system', content: system }, ...history], { maxTokens: 400 })]);
+  return firstAnswer([() => chatWithClaude(history, system), () => freeCompletion([{ role: 'system', content: system }, ...history], { maxTokens: 1000 })]);
 }

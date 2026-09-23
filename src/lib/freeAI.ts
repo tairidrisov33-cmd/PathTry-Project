@@ -18,6 +18,7 @@ export const freeAIConfigured = () => freeConfig() !== null;
 
 let workingModel: string | null = null;
 
+// Reasoning models (gpt-oss) spend part of max_tokens on thinking, so callers keep a generous budget.
 export async function freeCompletion(messages: ChatTurn[], options: { json?: boolean; maxTokens?: number } = {}): Promise<string | null> {
   const config = freeConfig();
   if (!config) return null;
