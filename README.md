@@ -15,6 +15,7 @@ Short, low-stakes work simulations. Each profession has ten tasks built from rea
 ## Features
 
 - **15 professions in 4 fields, 150 tasks** — Tech & Data, Healthcare & Science, Creative & Media, Humanities & Law; filterable catalogue with badges.
+- **Local exams** — every profession lists the Kazakhstan UNT (ЕНТ) subject pair next to international options (SAT, A-Levels, IB, IELTS).
 - **Realistic tasks** — 5 plausible options per question, shuffled so the correct answer is never in a fixed position.
 - **Pro insight** — after each choice, a short expert comment on why professionals act that way.
 - **PathFinder AI mentor** — reviews written answers against task criteria (strong / partial / off the task), gives hints without spoilers, shows an expert sample answer, and answers career questions with the current task in context.
@@ -43,6 +44,7 @@ flowchart LR
     A -->|ANTHROPIC_API_KEY, server only| C[Claude Haiku 4.5<br/>Anthropic API]
     A -->|GROQ_API_KEY, free tier| G[Open model via Groq<br/>OpenAI-compatible API]
     A -->|no key or error| R[Offline PathFinder<br/>rubric grader + catalog answers]
+    A -->|optional RESEND_API_KEY| E[Lead email<br/>Resend API]
     A -->|optional LEADS_WEBHOOK_URL| W[Lead webhook<br/>Make / Zapier / Sheets / Telegram]
     B -->|anonymous events| V[Vercel Analytics]
 ```
@@ -97,7 +99,8 @@ The end-to-end test answers every task, waits for PathFinder's review, and fails
 | `ANTHROPIC_API_KEY` | No | PathFinder on Claude Haiku 4.5 (paid, used first when set). |
 | `GROQ_API_KEY` | No | Free alternative: PathFinder on an open model via Groq's free tier (no card needed, key at console.groq.com). Several models are tried automatically; set `FREE_AI_MODEL` to pick one. |
 | `FREE_AI_API_KEY`, `FREE_AI_BASE_URL`, `FREE_AI_MODEL` | No | Any other OpenAI-compatible provider instead of Groq (e.g. Gemini: `https://generativelanguage.googleapis.com/v1beta/openai`, model `gemini-2.5-flash`). |
-| `LEADS_WEBHOOK_URL` | No | Roadmap and partner requests are POSTed here as JSON (Make, Zapier, Google Apps Script, a Telegram bot…). Without it, only anonymous lead metadata is logged. |
+| `RESEND_API_KEY`, `LEADS_EMAIL_TO` | No | Roadmap and partner requests arrive by email via [Resend](https://resend.com) (free tier). `LEADS_EMAIL_TO` is the inbox (comma-separated for several). Without a verified domain, Resend only delivers to the email the Resend account was created with; set `LEADS_EMAIL_FROM` once a domain is verified. |
+| `LEADS_WEBHOOK_URL` | No | Roadmap and partner requests are POSTed here as JSON (Make, Zapier, Google Apps Script, a Telegram bot…). Without email or a webhook, only anonymous lead metadata is logged. |
 
 With no AI key at all, PathFinder still works: answers are graded against task criteria and the chat answers from the catalogue.
 

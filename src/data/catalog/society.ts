@@ -7,7 +7,7 @@ export const society: ProfessionDef[] = [
     description: ['Find the relevant facts, build a reasoned argument, and help people move forward.', 'Находит важные факты, строит аргументы и помогает людям двигаться дальше.'],
     reality: ['Law is reading-heavy: you sort evidence, spot ambiguity, write clearly, and negotiate under pressure.', 'Право — это много чтения: разбирать доказательства, замечать неоднозначность, ясно писать и вести переговоры под давлением.'],
     subjects: [['English / Literature', 'Русский язык и литература'], ['History', 'История'], ['Social studies / Economics', 'Обществознание и экономика']],
-    exams: [['LSAT / LNAT', 'LSAT / LNAT'], ['A-Levels English & History', 'A-Levels: английский и история'], ['IB English & History', 'IB: английский и история'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): World History + Fundamentals of Law', 'ЕНТ: всемирная история + основы права'], ['LSAT / LNAT', 'LSAT / LNAT'], ['A-Levels English & History', 'A-Levels: английский и история'], ['IB English & History', 'IB: английский и история'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Law', 'Юриспруденция'], ['Politics', 'Политология'], ['International Relations', 'Международные отношения']],
     nextSteps: [['Read a short court judgment and summarise the decision.', 'Прочитай короткое судебное решение и перескажи его.'], ['Join a debate club or Model United Nations.', 'Вступи в дебатный клуб или Model United Nations.'], ['Ask a lawyer how much of their week is writing.', 'Спроси юриста, сколько времени в неделю он пишет документы.']],
     tasks: [
@@ -71,7 +71,7 @@ export const society: ProfessionDef[] = [
     description: ['Make ideas understandable, notice where learners are stuck, and build confidence.', 'Делает знания понятными, замечает, где ученики застряли, и поддерживает их уверенность.'],
     reality: ['Teaching is planning, explaining, listening, adapting, giving feedback, and managing many needs at once.', 'Преподавание — это планирование, объяснение, умение слушать, адаптация, обратная связь и много разных потребностей одновременно.'],
     subjects: [['English / Literature', 'Русский язык и литература'], ['Mathematics', 'Математика'], ['A subject you love', 'Любимый предмет']],
-    exams: [['Teacher training assessment', 'Экзамены для педагогического вуза'], ['A-Levels / IB subject results', 'Результаты A-Levels / IB по предмету'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): subjects of your specialisation', 'ЕНТ: профильные предметы специальности'], ['Teacher training assessment', 'Экзамены для педагогического вуза'], ['A-Levels / IB subject results', 'Результаты A-Levels / IB по предмету'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Education', 'Педагогика'], ['Subject Education', 'Педагогическое образование по предмету'], ['Child Development', 'Психология развития']],
     nextSteps: [['Tutor or mentor someone younger.', 'Позанимайся с кем-то младше тебя.'], ['Explain one difficult idea in two different ways.', 'Объясни одну сложную идею двумя разными способами.'], ['Observe a lesson and notice how feedback changes participation.', 'Понаблюдай за уроком и заметь, как обратная связь меняет активность учеников.']],
     tasks: [
@@ -135,7 +135,7 @@ export const society: ProfessionDef[] = [
     description: ['Find a real problem, test an idea, and make thoughtful decisions with limited information.', 'Находит реальную проблему, проверяет идеи и принимает решения в условиях неопределённости.'],
     reality: ['Entrepreneurship means talking to people, prioritising, handling uncertainty, and learning quickly when an idea changes.', 'Предпринимательство — это разговоры с людьми, приоритеты, риск и быстрые выводы, когда идея меняется.'],
     subjects: [['Mathematics', 'Математика'], ['Economics', 'Экономика'], ['English', 'Английский язык']],
-    exams: [['SAT / ACT', 'SAT / ACT'], ['A-Levels Business & Mathematics', 'A-Levels: бизнес и математика'], ['IB Business Management', 'IB: управление бизнесом'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Mathematics + Geography', 'ЕНТ: математика + география'], ['SAT / ACT', 'SAT / ACT'], ['A-Levels Business & Mathematics', 'A-Levels: бизнес и математика'], ['IB Business Management', 'IB: управление бизнесом'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Business', 'Бизнес'], ['Economics', 'Экономика'], ['Innovation & Entrepreneurship', 'Инновации и предпринимательство'], ['Marketing', 'Маркетинг']],
     nextSteps: [['Interview three people about one problem they share.', 'Поговори с тремя людьми об общей для них проблеме.'], ['Create the smallest version of a useful solution.', 'Сделай самую маленькую версию полезного решения.'], ['Keep a simple record of what changed after feedback.', 'Записывай, что меняется после обратной связи.']],
     tasks: [

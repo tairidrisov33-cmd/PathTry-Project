@@ -7,7 +7,7 @@ export const health: ProfessionDef[] = [
     description: ['Combine science, judgement, and human connection when people need help.', 'Соединяет науку, решения и человеческое внимание, когда людям нужна помощь.'],
     reality: ['Medicine means careful listening, uncertain decisions, teamwork, and staying calm when the stakes are high.', 'Медицина — это внимательно слушать, решать в условиях неопределённости, работать в команде и сохранять спокойствие.'],
     subjects: [['Biology', 'Биология'], ['Chemistry', 'Химия'], ['Mathematics', 'Математика']],
-    exams: [['MCAT / UCAT', 'MCAT / UCAT'], ['A-Levels Biology & Chemistry', 'A-Levels: биология и химия'], ['IB Biology & Chemistry', 'IB: биология и химия'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Biology + Chemistry', 'ЕНТ: биология + химия'], ['MCAT / UCAT', 'MCAT / UCAT'], ['A-Levels Biology & Chemistry', 'A-Levels: биология и химия'], ['IB Biology & Chemistry', 'IB: биология и химия'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Medicine', 'Лечебное дело'], ['Biomedical Sciences', 'Биомедицина'], ['Public Health', 'Общественное здоровье']],
     nextSteps: [['Volunteer in a care or community setting.', 'Поучаствуй в волонтёрстве в сфере помощи людям.'], ['Learn biology beyond memorising labels.', 'Изучай биологию не только через запоминание терминов.'], ['Ask a clinician what surprised them about the job.', 'Спроси врача, что удивило его в профессии.']],
     tasks: [
@@ -71,7 +71,7 @@ export const health: ProfessionDef[] = [
     description: ['Use evidence and empathy to help people understand patterns and make change possible.', 'Использует исследования и эмпатию, чтобы людям было легче понять себя и измениться.'],
     reality: ['The work asks for deep listening, careful notes, ethical boundaries, and comfort with slow progress.', 'Работа требует глубокого слушания, аккуратных записей, этических границ и терпения к медленному прогрессу.'],
     subjects: [['Biology', 'Биология'], ['Psychology', 'Психология'], ['Statistics', 'Статистика']],
-    exams: [['GRE (some programs)', 'GRE (для некоторых программ)'], ['A-Levels Psychology', 'A-Levels: психология'], ['IB Psychology', 'IB: психология'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Biology + Geography', 'ЕНТ: биология + география'], ['GRE (some programs)', 'GRE (для некоторых программ)'], ['A-Levels Psychology', 'A-Levels: психология'], ['IB Psychology', 'IB: психология'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Psychology', 'Психология'], ['Counselling', 'Психологическое консультирование'], ['Neuroscience', 'Нейронаука']],
     nextSteps: [['Take an introductory psychology course.', 'Пройди вводный курс по психологии.'], ['Practise listening without immediately fixing.', 'Тренируйся слушать, не пытаясь сразу всё исправить.'], ['Read how psychologists use research, not just personality quizzes.', 'Узнай, как психологи используют исследования, а не тесты из соцсетей.']],
     tasks: [
@@ -135,7 +135,7 @@ export const health: ProfessionDef[] = [
     description: ['Keep patients safe around the clock, notice changes early, and turn care plans into action.', 'Круглосуточно заботится о безопасности пациентов, замечает изменения раньше всех и воплощает план лечения.'],
     reality: ['Nursing is shift work: observing, giving medicines, calming families, documenting precisely, and reacting fast when someone worsens.', 'Работа медсестры — это смены: наблюдение, лекарства, разговоры с родственниками, точные записи и быстрая реакция, если пациенту становится хуже.'],
     subjects: [['Biology', 'Биология'], ['Chemistry', 'Химия'], ['Psychology', 'Психология']],
-    exams: [['A-Levels Biology', 'A-Levels: биология'], ['IB Biology', 'IB: биология'], ['NCLEX (later, in the US)', 'NCLEX (позже, в США)'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Biology + Chemistry', 'ЕНТ: биология + химия'], ['A-Levels Biology', 'A-Levels: биология'], ['IB Biology', 'IB: биология'], ['NCLEX (later, in the US)', 'NCLEX (позже, в США)'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Nursing', 'Сестринское дело'], ['Midwifery', 'Акушерское дело'], ['Paramedic Science', 'Скорая медицинская помощь']],
     nextSteps: [['Take a first-aid course with practical scenarios.', 'Пройди курс первой помощи с практическими сценариями.'], ['Volunteer in a care home or hospital support role.', 'Поволонтёрь в доме престарелых или больнице.'], ['Ask a nurse what a night shift is really like.', 'Спроси медсестру, какой бывает ночная смена на самом деле.']],
     tasks: [
@@ -199,7 +199,7 @@ export const health: ProfessionDef[] = [
     description: ['Diagnose and treat animals who cannot explain what hurts — and support the people who love them.', 'Диагностирует и лечит животных, которые не могут сказать, что болит, и поддерживает их хозяев.'],
     reality: ['Vet work mixes medicine, calm handling of scared animals, hard conversations about cost and loss, and long days.', 'Работа ветеринара — это медицина, спокойное обращение с испуганными животными, трудные разговоры о деньгах и потерях и длинные дни.'],
     subjects: [['Biology', 'Биология'], ['Chemistry', 'Химия'], ['Mathematics', 'Математика']],
-    exams: [['A-Levels Biology & Chemistry', 'A-Levels: биология и химия'], ['IB Biology & Chemistry', 'IB: биология и химия'], ['Work experience with animals', 'Опыт работы с животными'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Biology + Chemistry', 'ЕНТ: биология + химия'], ['A-Levels Biology & Chemistry', 'A-Levels: биология и химия'], ['IB Biology & Chemistry', 'IB: биология и химия'], ['Work experience with animals', 'Опыт работы с животными'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Veterinary Medicine', 'Ветеринария'], ['Animal Science', 'Зоотехния'], ['Biology', 'Биология']],
     nextSteps: [['Volunteer at an animal shelter.', 'Поволонтёрь в приюте для животных.'], ['Shadow a vet clinic for a day.', 'Проведи день в ветеринарной клинике в роли наблюдателя.'], ['Learn basic animal first aid.', 'Изучи основы первой помощи животным.']],
     tasks: [

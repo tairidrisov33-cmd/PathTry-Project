@@ -7,7 +7,7 @@ export const tech: ProfessionDef[] = [
     description: ['Turn messy problems into tools, products, and experiences that work.', 'Превращает сложные задачи в полезные инструменты и продукты.'],
     reality: ['A lot of the day is reading, asking precise questions, testing ideas, and improving small details.', 'Большая часть дня — чтение кода, точные вопросы, проверка идей и улучшение деталей.'],
     subjects: [['Mathematics', 'Математика'], ['Computer science', 'Информатика'], ['Physics', 'Физика']],
-    exams: [['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Mathematics', 'A-Levels: математика'], ['IB Math AA', 'IB Math AA'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Mathematics + Informatics', 'ЕНТ: математика + информатика'], ['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Mathematics', 'A-Levels: математика'], ['IB Math AA', 'IB Math AA'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Computer Science', 'Информатика'], ['Software Engineering', 'Программная инженерия'], ['Information Systems', 'Информационные системы']],
     nextSteps: [['Build a tiny website or automation for a real person.', 'Создай небольшой сайт или автоматизацию для реального человека.'], ['Take a beginner coding course and finish one project.', 'Пройди курс по программированию и доведи один проект до конца.'], ['Ask a developer what a normal Tuesday looks like.', 'Спроси разработчика, как выглядит его обычный вторник.']],
     tasks: [
@@ -71,7 +71,7 @@ export const tech: ProfessionDef[] = [
     description: ['Clean messy information, find meaningful patterns, and explain what the data can and cannot say.', 'Находит в данных закономерности и честно объясняет, что они могут и не могут показать.'],
     reality: ['Analysis is careful questioning, checking assumptions, visualising evidence, and communicating uncertainty.', 'Аналитика — это проверка предположений, визуализация доказательств и честный разговор о неопределённости.'],
     subjects: [['Mathematics', 'Математика'], ['Statistics', 'Статистика'], ['Computer science', 'Информатика']],
-    exams: [['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Mathematics', 'A-Levels: математика'], ['IB Math AI', 'IB Math AI'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Mathematics + Informatics', 'ЕНТ: математика + информатика'], ['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Mathematics', 'A-Levels: математика'], ['IB Math AI', 'IB Math AI'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Statistics', 'Статистика'], ['Economics', 'Экономика'], ['Data Science', 'Наука о данных'], ['Business Analytics', 'Бизнес-аналитика']],
     nextSteps: [['Track one everyday habit and visualise it honestly.', 'Отследи одну привычку и честно покажи её на графике.'], ['Learn spreadsheet formulas and basic statistics.', 'Изучи формулы в таблицах и базовую статистику.'], ['Ask what decision a dataset is supposed to support.', 'Уточняй, какое решение должен поддержать набор данных.']],
     tasks: [
@@ -135,7 +135,7 @@ export const tech: ProfessionDef[] = [
     description: ['Protect people and systems by spotting threats early and responding calmly.', 'Защищает людей и системы: замечает угрозы заранее и спокойно реагирует на атаки.'],
     reality: ['Security work is careful investigation, patient explanation to non-experts, and staying calm during incidents.', 'Работа в безопасности — это внимательные расследования, терпеливые объяснения для неспециалистов и спокойствие во время инцидентов.'],
     subjects: [['Computer science', 'Информатика'], ['Mathematics', 'Математика'], ['English', 'Английский язык']],
-    exams: [['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Computer Science', 'A-Levels: информатика'], ['IB Computer Science', 'IB: информатика'], ['CompTIA Security+ (later)', 'CompTIA Security+ (позже)']],
+    exams: [['UNT (Kazakhstan): Mathematics + Informatics', 'ЕНТ: математика + информатика'], ['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Computer Science', 'A-Levels: информатика'], ['IB Computer Science', 'IB: информатика'], ['CompTIA Security+ (later)', 'CompTIA Security+ (позже)']],
     majors: [['Cybersecurity', 'Информационная безопасность'], ['Computer Science', 'Информатика'], ['Network Engineering', 'Сетевые технологии']],
     nextSteps: [['Try a beginner Capture The Flag (CTF) challenge.', 'Попробуй начальный уровень соревнований CTF.'], ['Turn on two-factor authentication for your family’s accounts.', 'Включи двухфакторную аутентификацию в аккаунтах своей семьи.'], ['Learn how the internet works: IP addresses, DNS, HTTPS.', 'Разберись, как устроен интернет: IP-адреса, DNS, HTTPS.']],
     tasks: [
@@ -199,7 +199,7 @@ export const tech: ProfessionDef[] = [
     description: ['Design and build worlds, rules, and moments that make people want to keep playing.', 'Придумывает и создаёт миры, правила и моменты, из-за которых хочется играть дальше.'],
     reality: ['Game development is iteration: prototypes, playtests, bug fixing, tough scope cuts, and close teamwork with artists.', 'Разработка игр — это итерации: прототипы, плейтесты, исправление багов, тяжёлые решения что вырезать и командная работа с художниками.'],
     subjects: [['Mathematics', 'Математика'], ['Computer science', 'Информатика'], ['Physics', 'Физика'], ['Art / Design', 'Искусство и дизайн']],
-    exams: [['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Computer Science', 'A-Levels: информатика'], ['Portfolio of small games', 'Портфолио небольших игр'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Mathematics + Informatics', 'ЕНТ: математика + информатика'], ['SAT / ACT Math', 'SAT / ACT: математика'], ['A-Levels Computer Science', 'A-Levels: информатика'], ['Portfolio of small games', 'Портфолио небольших игр'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Game Development', 'Разработка игр'], ['Computer Science', 'Информатика'], ['Interactive Media', 'Интерактивные медиа']],
     nextSteps: [['Join a weekend game jam and finish a tiny game.', 'Поучаствуй в гейм-джеме на выходных и доделай маленькую игру.'], ['Try a free engine like Godot or Unity with a beginner tutorial.', 'Попробуй бесплатный движок Godot или Unity по начальному уроку.'], ['Watch a friend play your game without helping — take notes.', 'Посмотри, как друг играет в твою игру, не подсказывая, и запиши наблюдения.']],
     tasks: [

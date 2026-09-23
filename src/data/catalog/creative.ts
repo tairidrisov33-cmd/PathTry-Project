@@ -7,7 +7,7 @@ export const creative: ProfessionDef[] = [
     description: ['Make complex things feel clear, useful, and human through visual thinking.', 'Делает сложные вещи понятными, полезными и человечными.'],
     reality: ['Designers ask many questions, make rough versions, take feedback, and solve constraints with taste and logic.', 'Дизайнеры задают много вопросов, делают черновики, принимают обратную связь и решают ограничения вкусом и логикой.'],
     subjects: [['Art / Design', 'Искусство и дизайн'], ['English', 'Английский язык'], ['Technology', 'Технологии']],
-    exams: [['Portfolio review', 'Просмотр портфолио'], ['A-Levels Art & Design', 'A-Levels: искусство и дизайн'], ['IB Visual Arts', 'IB: визуальное искусство'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan) + creative exams', 'ЕНТ + творческие экзамены'], ['Portfolio review', 'Просмотр портфолио'], ['A-Levels Art & Design', 'A-Levels: искусство и дизайн'], ['IB Visual Arts', 'IB: визуальное искусство'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Graphic Design', 'Графический дизайн'], ['UX / Product Design', 'UX / продуктовый дизайн'], ['Industrial Design', 'Промышленный дизайн']],
     nextSteps: [['Redesign one confusing everyday object or screen.', 'Переделай один непонятный предмет или экран.'], ['Build a small portfolio that shows process, not just final images.', 'Собери портфолио с процессом, а не только с финальными картинками.'], ['Ask someone to use your design while you observe silently.', 'Попроси кого-то воспользоваться твоим дизайном и молча понаблюдай.']],
     tasks: [
@@ -71,7 +71,7 @@ export const creative: ProfessionDef[] = [
     description: ['Ask sharp questions, verify information, and tell stories people can trust.', 'Задаёт точные вопросы, проверяет информацию и рассказывает истории, которым можно доверять.'],
     reality: ['Journalism involves research, interviews, deadlines, editing, and separating a strong claim from a supported one.', 'Журналистика — это исследование, интервью, сроки, редактура и умение отличить громкое заявление от подтверждённого.'],
     subjects: [['English / Literature', 'Русский язык и литература'], ['History', 'История'], ['Media studies', 'Медиаграмотность']],
-    exams: [['A-Levels English & History', 'A-Levels: английский и история'], ['IB Language & Literature', 'IB: язык и литература'], ['Writing portfolio', 'Портфолио публикаций'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan) + creative exam', 'ЕНТ + творческий экзамен'], ['A-Levels English & History', 'A-Levels: английский и история'], ['IB Language & Literature', 'IB: язык и литература'], ['Writing portfolio', 'Портфолио публикаций'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Journalism', 'Журналистика'], ['Media and Communications', 'Медиакоммуникации'], ['International Relations', 'Международные отношения']],
     nextSteps: [['Report a small local story using two sources.', 'Подготовь небольшую местную новость с двумя источниками.'], ['Compare how different outlets cover the same event.', 'Сравни, как разные СМИ освещают одно событие.'], ['Practise writing headlines without exaggerating.', 'Тренируйся писать заголовки без преувеличений.']],
     tasks: [
@@ -135,7 +135,7 @@ export const creative: ProfessionDef[] = [
     description: ['Shape spaces by balancing people, materials, safety, beauty, and constraints.', 'Проектирует пространства, соединяя людей, материалы, безопасность, красоту и ограничения.'],
     reality: ['Architecture mixes creative ideas with measurements, codes, budgets, revisions, and collaboration.', 'Архитектура сочетает идеи с измерениями, нормами, бюджетом, правками и командной работой.'],
     subjects: [['Mathematics', 'Математика'], ['Physics', 'Физика'], ['Art / Design', 'Искусство и дизайн']],
-    exams: [['Portfolio review', 'Просмотр портфолио'], ['A-Levels Mathematics & Art', 'A-Levels: математика и искусство'], ['IB Mathematics & Visual Arts', 'IB: математика и визуальное искусство'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan): Mathematics + creative exam (drawing)', 'ЕНТ: математика + творческий экзамен (рисунок)'], ['Portfolio review', 'Просмотр портфолио'], ['A-Levels Mathematics & Art', 'A-Levels: математика и искусство'], ['IB Mathematics & Visual Arts', 'IB: математика и визуальное искусство'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Architecture', 'Архитектура'], ['Interior Architecture', 'Архитектура интерьера'], ['Urban Planning', 'Градостроительство']],
     nextSteps: [['Measure and redraw a room you use every day.', 'Измерь и перерисуй комнату, которой пользуешься каждый день.'], ['Make a small model from recyclable material.', 'Сделай небольшой макет из вторсырья.'], ['Visit a building and notice how people move through it.', 'Сходи в какое-нибудь здание и понаблюдай, как люди в нём перемещаются.']],
     tasks: [
@@ -199,7 +199,7 @@ export const creative: ProfessionDef[] = [
     description: ['Tell stories with images, sound, and timing — and lead a crew to make them real.', 'Рассказывает истории через изображение, звук и ритм и ведёт съёмочную группу к результату.'],
     reality: ['Filmmaking is mostly planning, problem-solving on set, directing people, and many hours in the edit.', 'Кино — это в основном планирование, решение проблем на площадке, работа с людьми и долгие часы монтажа.'],
     subjects: [['English / Literature', 'Литература'], ['Art / Design', 'Искусство'], ['Media studies', 'Медиа'], ['Physics (optics, sound)', 'Физика (оптика, звук)']],
-    exams: [['Short film portfolio', 'Портфолио короткометражек'], ['A-Levels Film Studies', 'A-Levels: киноведение'], ['IB Film', 'IB: кино'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
+    exams: [['UNT (Kazakhstan) + creative exams', 'ЕНТ + творческие экзамены'], ['Short film portfolio', 'Портфолио короткометражек'], ['A-Levels Film Studies', 'A-Levels: киноведение'], ['IB Film', 'IB: кино'], ['IELTS / TOEFL', 'IELTS / TOEFL']],
     majors: [['Film Production', 'Кинопроизводство'], ['Directing', 'Режиссура'], ['Screenwriting', 'Сценарное мастерство']],
     nextSteps: [['Shoot a one-minute film on your phone with a clear beginning and end.', 'Сними на телефон минутный фильм с чётким началом и концом.'], ['Rewatch a favourite scene and write down every cut.', 'Пересмотри любимую сцену и запиши каждую склейку.'], ['Volunteer on a student or local film set.', 'Поработай волонтёром на студенческих или местных съёмках.']],
     tasks: [
