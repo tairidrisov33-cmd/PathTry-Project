@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // Ownership tags for Google Search Console and Yandex Webmaster (public by design; env vars override).
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION || 'XGqG-trItOiDPONPW3Ps94e12ogEqvPjBQKJbMqRkc8',
-      yandex: process.env.YANDEX_VERIFICATION || undefined
+      yandex: process.env.YANDEX_VERIFICATION || '179b30105b6162a7'
     }
   };
 }
