@@ -10,9 +10,10 @@ import LeadCapture from '@/components/LeadCapture';
 import Icon, { professionColors, professionIcons, type IconName } from '@/components/Icon';
 import HeroArt from '@/components/HeroArt';
 import { Comparison, ValidationSection, WhyItMatters } from '@/components/EvidenceSections';
+import { HOME_URLS } from '@/lib/seo';
 
 const STRUCTURED_DATA = JSON.stringify([
-  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'PathTry', alternateName: ['Path Try', 'pathtry.site'], url: 'https://pathtry.site/' },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'PathTry', alternateName: 'Path Try', url: 'https://pathtry.site/', inLanguage: ['en', 'ru'], description: 'Try a profession in 10 minutes before you choose it: ten real work tasks with an AI mentor.' },
   { '@context': 'https://schema.org', '@type': 'Organization', name: 'PathTry', url: 'https://pathtry.site/', logo: 'https://pathtry.site/icon-512.png' }
 ]);
 
@@ -48,6 +49,8 @@ export default function Home() {
   return <main>
     {/* Site name and logo for search results (Google "site name" and knowledge panel). */}
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
+    <link rel="canonical" href={HOME_URLS[language]} />
+    {(['en', 'ru', 'x-default'] as const).map((code) => <link rel="alternate" hrefLang={code} href={HOME_URLS[code]} key={code} />)}
     <section className="hero">
       <div className="hero-copy">
         <div className="kicker"><span className="kicker-dot" />{text.kicker}</div>

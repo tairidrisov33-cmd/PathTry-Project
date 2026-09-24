@@ -5,7 +5,7 @@ import './globals.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import SiteChrome from '@/components/SiteChrome';
 import { serverLanguage } from '@/lib/serverLanguage';
-import { pageAlternates, SITE_URL } from '@/lib/seo';
+import { SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
   const language = await serverLanguage();
@@ -16,7 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title, description,
     applicationName: 'PathTry',
-    alternates: pageAlternates('/', language),
     openGraph: { type: 'website', siteName: 'PathTry', title, description, url: '/', locale: ru ? 'ru_RU' : 'en_US', alternateLocale: ru ? 'en_US' : 'ru_RU' },
     twitter: { card: 'summary_large_image', title, description },
     // Ownership tags for Google Search Console and Yandex Webmaster (public by design; env vars override).
