@@ -101,20 +101,20 @@ Next.js 15 (App Router, middleware, metadata routes, `next/og`) · React 19 · T
 
 ## Validation
 
-Pilot survey (Google Forms, September 2026): **8 participants, 7 of them school students**. Each tried one profession and answered questions before and after.
+Pilot survey (Google Forms, September 2026): **30 participants, 20 of them school students**. Each tried one profession and answered questions before and after.
 
 | Result | Value |
 | --- | --- |
-| Understanding of the day-to-day work, before → after (1–5) | 4.0 → 4.4 |
-| Learned something new about the real work | 100% |
-| Found the profession more interesting | 75% |
-| Would recommend PathTry to a friend | 75% |
-| Result matched how they felt (fully or partly) | 100% |
-| How close the tasks feel to real work (1–5) | 4.1 |
+| Understanding of the day-to-day work, before → after (1–5) | 3.8 → 4.4 |
+| Learned something new about the real work | 93% |
+| Found the profession more interesting | 60% |
+| Said the result matched how they felt (fully or partly) | 100% |
+| Would recommend PathTry to a friend | 50% yes, 50% maybe, 0% no |
+| How close the tasks feel to real work (1–5) | 4.5 |
 | Ease of use (1–5) | 4.3 |
-| PathFinder usefulness among those who used it (1–5) | 4.3 |
+| Used PathFinder / its usefulness (1–5) | 93% / 4.3 |
 
-Participants liked the interface and the questions; they asked for a more reliable PathFinder (now with a fallback mode) and more realistic situations in tasks (next content update). The numbers live in `src/data/validation.ts` and render in the "Tested with real students" section only when real data is present.
+Participants liked the interface, the questions and the AI explanations; they asked for a more reliable PathFinder (now with a fallback mode) and more realistic situations in tasks (next content update). The numbers live in `src/data/validation.ts` and render in the "Tested with real students" section only when real data is present.
 
 ## AI tools used
 
