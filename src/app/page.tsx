@@ -68,8 +68,11 @@ export default function Home() {
       <HeroArt language={language} timer={text.heroTimer} taskLabel={(step) => ru ? `Задание ${step} из 10` : `Task ${step} of 10`} />
     </section>
     <section className="stats-strip" aria-label={ru ? 'PathTry в цифрах' : 'PathTry at a glance'}>{stats.map((item) => <div className="stat" key={item.label}><span className="stat-icon"><Icon name={item.icon} size={18} /></span><div><strong>{item.value}</strong><span>{item.label}</span></div></div>)}</section>
+    {/* Problem and method side by side, so the catalogue starts sooner. */}
+    <div className="intro-pair">
     <WhyItMatters language={language} />
-    <section className="section" data-reveal><div className="section-head"><div><div className="kicker">{text.howKicker}</div><h2>{text.howTitle}</h2></div><span className="muted">{text.built}</span></div><div className="steps">{steps.map((step, index) => <div className="step" key={step.title}><div className="step-top"><span className="step-num">0{index + 1}</span><span className="step-icon"><Icon name={step.icon} size={20} /></span></div><h3>{step.title}</h3><p>{step.body}</p></div>)}</div></section>
+    <section className="section how-compact" data-reveal><div className="section-head"><div><div className="kicker">{text.howKicker}</div><h2>{text.howTitle}</h2></div><span className="muted">{text.built}</span></div><div className="steps">{steps.map((step, index) => <div className="step" key={step.title}><div className="step-top"><span className="step-num">0{index + 1}</span><span className="step-icon"><Icon name={step.icon} size={20} /></span></div><h3>{step.title}</h3><p>{step.body}</p></div>)}</div></section>
+    </div>
     <Comparison language={language} />
     <section className="section" id="professions" data-reveal><div className="section-head"><div><div className="kicker">{text.choose}</div><h2>{text.paths}</h2></div><span className="muted">{text.count}</span></div><ProfessionExplorer /></section>
     <ValidationSection language={language} />
